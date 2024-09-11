@@ -1,0 +1,13 @@
+{
+    "name": "snakemake",
+    "extensions": [
+        "mhutchie.git-graph",
+        "eamodio.gitlens",
+        "GitHub.copilot",
+        "snakemake.snakemake-lang",
+        "tfehlmann.snakefmt"
+    ],
+    "image": "snakemake/snakemake",
+    "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind,consistency=cached", 
+    "workspaceFolder": "${localWorkspaceFolder}"
+} 
