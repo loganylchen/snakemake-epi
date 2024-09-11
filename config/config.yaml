@@ -11,6 +11,7 @@ gloritools:
   trim_galore: ' -q 20 --stringency 1 -e 0.3 --length 35  '
   fastx_trimmer: ' -Q 33 -f 11 '
   gloritools_run: ' --combine --rvs_fac -c 1 -C 0 -r 0 -p 1.1 -adp 1.1 -s 0 '
+  gloritools_run_control: ' --combine --untreated '
   fastp: ' --dedup --dup_calc_accuracy 5 --cut_tail --cut_tail_mean_quality 20 '
 
 reference:

@@ -61,8 +61,8 @@ rule glori_trim_dedup:
     shell:
         " fastp --in1 {input.fastq} "
         " --out1 {output.clean_fastq} "
-        " --json {output.json} "
-        " --html {output.html} "
+        " --json {output.fastp_json} "
+        " --html {output.fastp_html} "
         " --thread {treahds} 1>{log.log} 2>{log.err} "
 
 
