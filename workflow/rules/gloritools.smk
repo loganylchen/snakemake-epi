@@ -17,10 +17,10 @@ rule run_gloritools:
         params=config['gloritools']['gloritools_run'],
         prefix="{sample}",
     log:
-        log="logs/gloritools/indexing_index_baseanno.log",
-        err="logs/gloritools/indexing_index_baseanno.err"
+        log="logs/gloritools/{sample}_gloritools_m6Arun.log",
+        err="logs/gloritools/{sample}_gloritools_m6Arun.err"
     benchmark:
-        "benchmarks/gloritools/indexing_index_baseanno.txt"
+        "benchmarks/gloritools/{sample}_gloritools_m6Arun.txt"
     shell:
         ' python3 /opt/GLORI-tools/run_GLORI.py '
         ' -i /opt/GLORI-tools '
