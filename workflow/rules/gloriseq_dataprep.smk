@@ -4,7 +4,7 @@ rule glori_trim:
     output:
         clean_fastq="results/{sample}/gloritools/cleandata/{sample}_trimmed.fq.gz"
     params:
-        params=config['gloritools']['trim_galore']，
+        params=config['gloritools']['trim_galore'],
         outdir="results/{sample}/gloritools/cleandata",
     threads: config["threads"]["trim_galore"]
     conda:
