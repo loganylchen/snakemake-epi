@@ -55,6 +55,7 @@ rule glori_build_index_transcriptome:
     input:
         select_transcriptome_reference="references/gloritools/selected_transcriptome.fa"
     output:
+        transcript_fa='references/gloritools/transcriptome_index/transcriptome.AG_conversion.fa',
         transcript_indexes=multiext("references/gloritools/transcriptome_index/transcriptome.AG_conversion.fa",
                                  ".1.ebwt", ".2.ebwt",".3.ebwt",".4.ebwt",'.rev.1.ebwt','.rev.2.ebwt'),
         outdir=directory("references/gloritools/transcriptome_index/"),
