@@ -7,7 +7,8 @@
         "snakemake.snakemake-lang",
         "tfehlmann.snakefmt"
     ],
-    "image": "snakemake/snakemake",
-    "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind,consistency=cached", 
+    "image": "snakemake/snakemake:v8.20.3",
+    "postCreateCommand": "pip install snakefmt==0.10.2",
+    "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind,consistency=cached",
     "workspaceFolder": "${localWorkspaceFolder}"
-} 
+}
