@@ -63,7 +63,7 @@ rule glori_trim_dedup:
         " --out1 {output.clean_fastq} "
         " --json {output.fastp_json} "
         " --html {output.fastp_html} "
-        " --thread {treahds} 1>{log.log} 2>{log.err} "
+        " --thread {threads} 1>{log.log} 2>{log.err} "
 
 
 rule glori_trim_umi:
