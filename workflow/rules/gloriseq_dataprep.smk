@@ -2,10 +2,10 @@ rule glori_trim:
     input:
         fastq="data/{sample}/{sample}.read2.fq.gz"
     output:
-        outdir=directory("results/{sample}/gloritools/cleandata"),
         clean_fastq="results/{sample}/gloritools/cleandata/{sample}_trimmed.fq.gz"
     params:
-        params=config['gloritools']['trim_galore']
+        params=config['gloritools']['trim_galore']，
+        outdir="results/{sample}/gloritools/cleandata",
     threads: config["threads"]["trim_galore"]
     conda:
         "../envs/trim_galore.yaml"
@@ -16,7 +16,7 @@ rule glori_trim:
         "benchmarks/gloritools/{sample}_trim_galore.txt"
     shell:
         ' trim_galore {params.params} '
-        ' -j {threads} -o {output_dir1} '
+        ' -j {threads} -o {params.outdir} '
         ' --basename {wildcards.sample} '
         ' {input.fastq} 1>{log.log} 2>{log.err} '
 
