@@ -5,7 +5,7 @@ rule glori_trim:
         clean_fastq="results/{sample}/gloritools/cleandata/{sample}_trimmed.fq.gz",
     params:
         params=config["gloritools"]["trim_galore"],
-        outdir=lambda w, input: os.path.dirname(input.clean_fastq)[0],
+        outdir=lambda w, output: os.path.dirname(output.clean_fastq),
     threads: config["threads"]["trim_galore"]
     conda:
         "../envs/trim_galore.yaml"
