@@ -101,8 +101,6 @@ rule glori_build_index_genome:
         ),
         outdir=directory("references/gloritools/genome_index/"),
     threads: config["threads"]["gloritools_build_index"]
-    params:
-        name="genome",
     container:
         "docker://btrspg/gloritools:latest"
     log:
@@ -115,7 +113,7 @@ rule glori_build_index_genome:
         " -f {input.genome_reference} "
         " -p {threads} "
         " -o {output.outdir}/ "
-        " -pre {params.name} 1>{log.log} 2>{log.err} "
+        " -pre genome 1>{log.log} 2>{log.err} "
 
 
 rule glori_index_baseanno:
