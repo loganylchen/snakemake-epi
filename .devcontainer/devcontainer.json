@@ -5,7 +5,8 @@
         "eamodio.gitlens",
         "GitHub.copilot",
         "snakemake.snakemake-lang",
-        "tfehlmann.snakefmt"
+        "tfehlmann.snakefmt",
+        "github.vscode-github-actions"
     ],
     "image": "snakemake/snakemake:v8.20.3",
     "postCreateCommand": "pip install snakefmt==0.10.2",
