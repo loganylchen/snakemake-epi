@@ -95,14 +95,13 @@ rule glori_build_index_genome:
             "references/gloritools/genome_index/genome",
             ".AG_conversion.fa",
             ".AG_conversion.fa.fai",
-            ".rvsCom",
             ".rvsCom.fa",
             ".rvsCom.fa.fai",
         ),
         outdir=directory("references/gloritools/genome_index/"),
+        raw_index=directory("references/gloritools/genome_index/genome.AG_conversion"),
+        rvs_index=directory("references/gloritools/genome_index/genome.rvsCom"),
     threads: config["threads"]["gloritools_build_index"]
-    params:
-        prefix="genome",
     container:
         "docker://btrspg/gloritools:latest"
     log:
@@ -115,7 +114,7 @@ rule glori_build_index_genome:
         " -f {input.genome_reference} "
         " -p {threads} "
         " -o {output.outdir}/ "
-        " -pre {params.prefix} 1>{log.log} 2>{log.err} "
+        " -pre genome 1>{log.log} 2>{log.err} "
 
 
 rule glori_index_baseanno:
