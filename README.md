@@ -30,6 +30,12 @@ snakemake --cores THREADS --use-singularity --use-conda
 - [`samples.tsv`](config/samples.tsv) example.
 - [`config.yaml`](config/config.yaml) example.
 
+```yaml
+reference:
+  transcriptome_fa: transcriptome.fa
+  gtf: transcript.gtf
+  genome_fa: genome.fa
+```
 
 The usage of this workflow is described in the [Snakemake Workflow Catalog](https://snakemake.github.io/snakemake-workflow-catalog/?usage=loganylchen%2Fsnakemake-epitranscriptome).
 
