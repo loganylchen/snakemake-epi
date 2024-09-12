@@ -1,3 +1,5 @@
+samples: config/samples.tsv
+
 
 threads:
   trim_galore: 8

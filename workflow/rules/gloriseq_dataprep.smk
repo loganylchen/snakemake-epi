@@ -43,7 +43,7 @@
 
 rule glori_trim_dedup:
     input:
-        fastq="data/{sample}/{sample}.read2.fq.gz",
+        unpack(get_raw_fastq),
     output:
         clean_fastq="results/{sample}/gloritools/cleandata/{sample}_rmdup.fq.gz",
         fastp_html="results/{sample}/gloritools/cleandata/{sample}_rmdup.html",
