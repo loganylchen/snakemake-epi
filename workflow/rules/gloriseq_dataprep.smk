@@ -84,7 +84,7 @@ rule glori_uncompress_fastq:
 
 rule glori_trim_umi:
     input:
-        rmdup_fastq="results/{sample}/gloritools/cleandata/{sample}_rmdup.fq",
+        rmdup_fastq="results/{sample}/gloritools/cleandata/{sample}_rmdup.fastq",
     output:
         rmumi_fastq="results/{sample}/gloritools/cleandata/{sample}_rmumi.fq",
     params:
