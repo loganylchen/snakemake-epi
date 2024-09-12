@@ -95,11 +95,12 @@ rule glori_build_index_genome:
             "references/gloritools/genome_index/genome",
             ".AG_conversion.fa",
             ".AG_conversion.fa.fai",
-            ".rvsCom",
             ".rvsCom.fa",
             ".rvsCom.fa.fai",
         ),
         outdir=directory("references/gloritools/genome_index/"),
+        raw_index=directory("references/gloritools/genome_index/genome.AG_conversion"),
+        rvs_index=directory("references/gloritools/genome_index/genome.rvsCom"),
     threads: config["threads"]["gloritools_build_index"]
     container:
         "docker://btrspg/gloritools:latest"
