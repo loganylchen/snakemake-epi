@@ -46,7 +46,7 @@ jobs:
       with:
         directory: .test
         snakefile: workflow/Snakefile
-        args: --use-conda --show-failed-logs --cores 3 --conda-cleanup-pkgs cache --all-temp --use-singularity --singularity-args ' -u ' 
+        args: --use-conda --show-failed-logs --cores 3 --conda-cleanup-pkgs cache --all-temp --use-singularity  
 
     - name: Test report
       uses: snakemake/snakemake-github-action@v1.24.0
