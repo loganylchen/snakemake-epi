@@ -66,9 +66,25 @@ rule glori_trim_dedup:
         " --thread {threads} 1>{log.log} 2>{log.err} "
 
 
+rule glori_uncompress_fastq:
+    input:
+        clean_fastq="results/{sample}/gloritools/cleandata/{sample}_rmdup.fq.gz",
+    output:
+        output_fastq=temp("results/{sample}/gloritools/cleandata/{sample}_rmdup.fastq"),
+    threads: 1
+    conda:
+        "../envs/fastp.yaml"
+    log:
+        log="logs/gloritools/{sample}_uncompressed_fastq.log",
+    benchmark:
+        "benchmarks/gloritools/{sample}_uncompressed_fastq.txt"
+    shell:
+        " gzip -dc {input.clean_fastq} > {output.output_fastq} && echo date > {log.log} "
+
+
 rule glori_trim_umi:
     input:
-        rmdup_fastq="results/{sample}/gloritools/cleandata/{sample}_rmdup.fq.gz",
+        rmdup_fastq="results/{sample}/gloritools/cleandata/{sample}_rmdup.fq",
     output:
         rmumi_fastq="results/{sample}/gloritools/cleandata/{sample}_rmumi.fq",
     params:
