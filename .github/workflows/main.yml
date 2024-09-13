@@ -58,6 +58,7 @@ jobs:
         generate-run-shell: true 
     - name: Test workflow
       run: |
+        cat workflow/rules/common.smk
         sudo sysctl -w kernel.unprivileged_userns_clone=1
         cat /proc/sys/kernel/unprivileged_userns_clone
         singularity run docker://alpine cat /etc/os-release
