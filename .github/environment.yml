@@ -1,8 +1,0 @@
-name: snakemake
-channels:
-  - bioconda
-  - conda-forge
-dependencies:
-  - snakedeploy=0.9.1
-  - snakemake=7.32.4
-  - snakemake-minimal=7.32.4

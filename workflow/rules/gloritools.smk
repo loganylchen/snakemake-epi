@@ -8,13 +8,13 @@ rule run_gloritools:
         annotation_tbl2="references/gloritools/annotation2.tbl",
         baseanno_tbl="references/gloritools/baseanno.tbl",
     output:
-        outdir=directory("results/{sample}/gloritools/glori/"),
         m6a_results="results/{sample}/gloritools/glori/{sample}.totalm6A.FDR.csv",
     threads: config["threads"]["gloritools_run"]
     container:
         "docker://btrspg/gloritools:latest"
     params:
         params=config["gloritools"]["gloritools_run"],
+        outdir=lambda x, output: os.path.dirname(output.m6a_results),
         prefix="{sample}",
     log:
         log="logs/gloritools/{sample}_gloritools_m6Arun.log",
@@ -31,7 +31,7 @@ rule run_gloritools:
         " -Tf {input.transcriptome_ag_reference} "
         " -a {input.annotation_tbl2} "
         " -b {input.baseanno_tbl} "
-        " -pre {params.prefix} -o {output.outdir} "
+        " -pre {params.prefix} -o {params.outdir} "
         " {params.params} 1>{log.log} 2>{log.err} "
 
 
@@ -45,13 +45,13 @@ rule run_gloritools_control:
         annotation_tbl2="references/gloritools/annotation2.tbl",
         baseanno_tbl="references/gloritools/baseanno.tbl",
     output:
-        outdir=directory("results/{sample}/gloritools/glori_asControl/"),
         m6a_results="results/{sample}/gloritools/glori_asControl/{sample}.totalm6A.FDR.csv",
     threads: config["threads"]["gloritools_run"]
     container:
         "docker://btrspg/gloritools:latest"
     params:
         params=config["gloritools"]["gloritools_run_control"],
+        outdir=lambda x, output: os.path.dirname(output.m6a_results),
         prefix="{sample}",
     log:
         log="logs/gloritools/{sample}_gloritools_control_m6Arun.log",
@@ -68,5 +68,5 @@ rule run_gloritools_control:
         " -Tf {input.transcriptome_ag_reference} "
         " -a {input.annotation_tbl2} "
         " -b {input.baseanno_tbl} "
-        " -pre {params.prefix} -o {output.outdir} "
+        " -pre {params.prefix} -o {params.outdir} "
         " {params.params} 1>{log.log} 2>{log.err} "
