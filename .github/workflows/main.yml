@@ -61,7 +61,7 @@ jobs:
         sudo sysctl -w kernel.unprivileged_userns_clone=1
         cat /proc/sys/kernel/unprivileged_userns_clone
         singularity run docker://alpine cat /etc/os-release
-        snakemake --snakefile workflow/Snakefile --directory .test --use-conda --show-failed-logs --cores 3 --conda-cleanup-pkgs cache --all-temp --use-singularity --singularity-args ' -u '
+        snakemake --snakefile workflow/Snakefile --directory .test --use-conda --show-failed-logs --cores 3 --use-singularity --singularity-args ' -u '
       shell: micromamba-shell {0}
     # - name: Test workflow
     #   uses: snakemake/snakemake-github-action@v1.24.0
