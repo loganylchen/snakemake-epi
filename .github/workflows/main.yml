@@ -45,9 +45,14 @@ jobs:
       with:
         micromamba-version: '1.5.6-0' # any version from https://github.com/mamba-org/micromamba-releases
         environment-name: snakemake
+        condarc: |
+          channels:
+            - conda-forge
+            - bioconda
+            - anaconda
         create-args: >-
           snakemake
-          snakedepoly
+          snakedeploy
         init-shell: >-
           bash      
     - run: |
