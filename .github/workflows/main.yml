@@ -38,7 +38,10 @@ jobs:
       - Formatting
     steps:
     - uses: actions/checkout@v3
-    - run: sudo sysctl -w kernel.unprivileged_userns_clone=1
+    - run: |
+        sudo sysctl -w kernel.unprivileged_userns_clone=1
+        cat /proc/sys/kernel/unprivileged_userns_clone
+
     - uses: eWaterCycle/setup-singularity@v7
       with:
         singularity-version: 3.8.3
