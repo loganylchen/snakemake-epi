@@ -69,6 +69,8 @@ rule glori_trim_dedup:
 rule glori_uncompress_fastq:
     input:
         clean_fastq="results/{sample}/gloritools/cleandata/{sample}_rmdup.fq.gz",
+        fastp_html="results/{sample}/gloritools/cleandata/{sample}_rmdup.html",
+        fastp_json="results/{sample}/gloritools/cleandata/{sample}_rmdup.json",
     output:
         output_fastq=temp("results/{sample}/gloritools/cleandata/{sample}_rmdup.fastq"),
     threads: 1
