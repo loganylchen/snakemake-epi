@@ -2,19 +2,11 @@ samples: config/samples.tsv
 
 
 threads:
-  trim_galore: 8
-  seqkit_rmdup: 8
-  fastx_trimmer: 1
   fastp: 16
-  gloritools_build_index: 12
-  gloritools_run: 12
+  
 
 gloritools:
-  trim_galore: ' -q 20 --stringency 1 -e 0.3 --length 35  '
-  fastx_trimmer: ' -Q 33 -f 11 '
-  gloritools_run: ' --combine --rvs_fac -c 1 -C 0 -r 0 -p 1.1 -adp 1.1 -s 0 '
-  gloritools_run_control: ' --combine --untreated '
-  fastp: ' --dedup --dup_calc_accuracy 5 --cut_tail --cut_tail_mean_quality 20 '
+  fastp: ' --dedup --dup_calc_accuracy 5 --cut_tail --cut_tail_mean_quality 20 --umi --umi_loc per_read --umi_len 10 '
 
 reference:
   transcriptome_fa: transcriptome.fa
