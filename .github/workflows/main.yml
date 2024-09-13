@@ -39,9 +39,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - run: echo 1 | sudo tee /proc/sys/kernel/unprivileged_userns_clone
-    # - uses: eWaterCycle/setup-singularity@v7
-    #   with:
-    #     singularity-version: 3.8.3
+    - uses: eWaterCycle/setup-singularity@v7
+      with:
+        singularity-version: 3.8.3
+    - run: singularity run docker://alpine cat /etc/os-release
     - name: Test workflow
       uses: snakemake/snakemake-github-action@v1.24.0
       with:
