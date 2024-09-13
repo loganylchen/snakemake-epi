@@ -44,10 +44,11 @@ jobs:
     - run: singularity run docker://alpine cat /etc/os-release
     - name: Test workflow
       uses: snakemake/snakemake-github-action@v1.24.0
-      with:
-        directory: .test
-        snakefile: workflow/Snakefile
-        args: --use-conda --show-failed-logs --cores 3 --conda-cleanup-pkgs cache --all-temp --use-singularity  
+    - run: snakemake --directory .test --use-conda --show-failed-logs --cores 3 --conda-cleanup-pkgs cache --all-temp --use-singularity --singularity-args ' -u '
+      # with:
+      #   directory: .test
+      #   snakefile: workflow/Snakefile
+      #   args: --use-conda --show-failed-logs --cores 3 --conda-cleanup-pkgs cache --all-temp --use-singularity  
 
     - name: Test report
       uses: snakemake/snakemake-github-action@v1.24.0
