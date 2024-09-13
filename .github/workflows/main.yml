@@ -38,13 +38,13 @@ jobs:
       - Formatting
     steps:
     - uses: actions/checkout@v3
+    - name: Test workflow
+      uses: snakemake/snakemake-github-action@v1.24.0
     - run: |
         sudo sysctl -w kernel.unprivileged_userns_clone=1
         cat /proc/sys/kernel/unprivileged_userns_clone
-    - run: singularity run docker://alpine cat /etc/os-release
-    - name: Test workflow
-      uses: snakemake/snakemake-github-action@v1.24.0
-    - run: snakemake --directory .test --use-conda --show-failed-logs --cores 3 --conda-cleanup-pkgs cache --all-temp --use-singularity --singularity-args ' -u '
+        singularity run docker://alpine cat /etc/os-release
+        snakemake --directory .test --use-conda --show-failed-logs --cores 3 --conda-cleanup-pkgs cache --all-temp --use-singularity --singularity-args ' -u '
       # with:
       #   directory: .test
       #   snakefile: workflow/Snakefile
