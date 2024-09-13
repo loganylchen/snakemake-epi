@@ -4,9 +4,9 @@ from snakemake.utils import min_version
 min_version("6.4.1")
 
 
-
 ##### setup report #####
 configfile: "config/config.yaml"
+
 
 ##### setup singularity #####
 
@@ -16,11 +16,10 @@ configfile: "config/config.yaml"
 container: "docker://condaforge/mambaforge:22.11.1-4"
 
 
-
 include: "rules/common.smk"
-include: "rules/gloriseq_dataprep.smk"
-include: "rules/gloriseq_indexprep.smk"
-include: "rules/gloritools.smk"
+include: "rules/optimized_gloritools_dataprep.smk"
+include: "rules/optimized_gloritools_indexprep.smk"
+include: "rules/optimized_gloritools.smk"
 
 
 ##### target rules #####
