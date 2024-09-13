@@ -12,6 +12,8 @@ samples = (
 def get_raw_fastq(wildcards):
     if samples[wildcards.sample]["ToolType"] == "gloritools":
         return {"fastq": samples[wildcards.sample]["Read2Fastq"]}
+    elif samples[wildcards.sample]["ToolType"] == "patch-gloritools":
+        return {"fastq": samples[wildcards.sample]["Read2Fastq"]}
     else:
         raise ValueError(f'{samples[wildcards.sample]["ToolType"]} was not supported')
 
