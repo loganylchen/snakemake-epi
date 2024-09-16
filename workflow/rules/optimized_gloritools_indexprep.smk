@@ -112,7 +112,7 @@ rule glori_build_index_genome:
         raw_genome_reference=config["reference"]["genome_fa"],
     output:
         convert_genome_index=multiext(
-            "references/gloritools/genome_AG",
+            "references/gloritools/genome_AG/",
             "chrLength.txt",
             "chrName.txt",
             "Genome",
@@ -124,7 +124,7 @@ rule glori_build_index_genome:
             "SA",
         ),
         rev_convert_genome_index=multiext(
-            "references/gloritools/genome_rc_AG",
+            "references/gloritools/genome_rc_AG/",
             "chrLength.txt",
             "chrName.txt",
             "Genome",
@@ -135,7 +135,7 @@ rule glori_build_index_genome:
             "genomeParameters.txt",
             "SA",
         ),
-        raw_genome_index_dir=directory("references/gloritools/genome"),
+        raw_genome_index_dir=directory("references/gloritools/genome/"),
     params:
         convert_genome_prefix=lambda x, input: os.path.splitext(
             input.convert_genome_reference

@@ -25,7 +25,10 @@ def get_output_list_for_one_sample(sample):
             # f"results/{sample}/gloritools/glori_asControl/{sample}.totalm6A.FDR.csv",
         ]
     elif samples[sample]["ToolType"] == "patch-gloritools":
-        return [f"results/{sample}/gloritools/cleandata/{sample}_rmdup.json"]
+        return [
+            f"results/{sample}/gloritools/cleandata/{sample}_rmdup.json",
+            f"results/{sample}/gloritools/{sample}_unmapped.fq",
+        ]
     else:
         raise ValueError(
             f'|{samples[sample]["ToolType"]}| was not supported, {samples[sample]["ToolType"] in['gloritools', 'patch-gloritools']}'
