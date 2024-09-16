@@ -31,7 +31,7 @@ def get_output_list_for_one_sample(sample):
         ]
     else:
         raise ValueError(
-            f'|{samples[sample]["ToolType"]}| was not supported, {samples[sample]["ToolType"] in['gloritools', 'patch-gloritools']}'
+            f'|{samples[sample]["ToolType"]}| was not supported, {samples[sample]["ToolType"] in['gloritools ', ' patch - gloritools ']}'
         )
 
 
@@ -41,7 +41,7 @@ def get_final_output():
         "references/gloritools/transcriptome_AG.fa",
         "references/gloritools/genome_AG.fa",
         "references/gloritools/genome_rc_AG.fa",
-        "references/gloritools/genome",
+        "references/gloritools/genome/Log.out",
         "references/gloritools/transcriptome_AG.fa.rev.1.ebwt",
     ]
     for sample in samples.keys():

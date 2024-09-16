@@ -1,8 +1,8 @@
-rule gloritools_genome_mapping:
+rule gloritools_genome_mapping_treated:
     input:
         fastq="results/{sample}/gloritools/cleandata/{sample}_rmdup.fq.gz",
         ag_genome_dir=multiext(
-            "references/gloritools/genome_AG/",
+            "references/gloritools/genome/",
             "chrLength.txt",
             "chrName.txt",
             "Genome",
