@@ -33,7 +33,12 @@ def get_output_list_for_one_sample(sample):
 
 
 def get_final_output():
-    final_output = ["references/gloritools/annotation.tbl"]
+    final_output = [
+        "references/gloritools/annotation.tbl",
+        "references/gloritools/transcriptome_AG.fa",
+        "references/gloritools/genome_AG.fa",
+        "references/gloritools/genome_rc_AG.fa",
+    ]
     for sample in samples.keys():
         final_output += get_output_list_for_one_sample(sample)
     return final_output

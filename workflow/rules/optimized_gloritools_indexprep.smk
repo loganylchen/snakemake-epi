@@ -5,11 +5,34 @@ rule glori_gtf2anno:
         anno="references/gloritools/annotation.tbl",
     threads: 1
     log:
-        "logs/gloritools/gtf2anno.log",
+        log="logs/gloritools/gtf2anno.log",
+        err="logs/gloritools/gtf2anno.err",
     benchmark:
         "benchmarks/gloritools/gtf2anno.txt"
+    conda:
+        "../envs/python.yaml"
     script:
         "../scripts/gloritools_gtf2anno.py"
+
+
+rule glori_converting_reference:
+    input:
+        genome=config["reference"]["genome_fa"],
+        transcriptome=config["reference"]["transcriptome_fa"],
+    output:
+        genome_reference="references/gloritools/genome_AG.fa",
+        genome_reference_complement="references/gloritools/genome_rc_AG.fa",
+        transcriptome_reference="references/gloritools/transcriptome_AG.fa",
+    threads: 1
+    log:
+        log="logs/gloritools/glori_converting_reference.log",
+        err="logs/gloritools/glori_converting_reference.err",
+    benchmark:
+        "benchmarks/gloritools/glori_converting_reference.txt"
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/gloritools_reference_converting.py"
 
 
 # rule glori_preptbl:
@@ -29,8 +52,6 @@ rule glori_gtf2anno:
 #         " python3 /opt/GLORI-tools/get_anno/gtf2anno.py "
 #         " -i {input.gtf} "
 #         " -o {output.annotation_tbl} 1>{log.log} 2>{log.err} "
-
-
 # rule glori_preptbl2:
 #     input:
 #         annotation_tbl="references/gloritools/annotation.tbl",
@@ -45,8 +66,6 @@ rule glori_gtf2anno:
 #         "benchmarks/gloritools/indexing_gtf2anno2.txt"
 #     shell:
 #         """awk '$3!~/_/&&$3!="na"' {input.annotation_tbl} | grep -v 'unknown_transcript'  > {output.annotation_tbl2} && echo date > {log.log}"""
-
-
 # rule glori_select_longest_transcripts:
 #     input:
 #         annotation_tbl="references/gloritools/annotation2.tbl",
@@ -66,8 +85,6 @@ rule glori_gtf2anno:
 #         " -anno {input.annotation_tbl} "
 #         " -fafile {input.transcriptome_reference} "
 #         " --outname_prx {output.select_transcriptome_reference} 1>{log.log} 2>{log.err} "
-
-
 # rule glori_build_index_transcriptome:
 #     input:
 #         select_transcriptome_reference="references/gloritools/selected_transcriptome.fa",

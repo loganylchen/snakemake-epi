@@ -4,3 +4,7 @@ logs/**
 .snakemake
 .snakemake/**
 .DS_Store
+.test/benchmarks
+.test/logs
+.test/references
+.test/results

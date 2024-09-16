@@ -122,36 +122,38 @@ def readGTF(gtf_file):
     return gtf_dict
 
 
-with open(snakemake.log[0], "w") as log_f:
-    sys.stderr = sys.stdout = log_f
-    print(f'reading {snakemake.input.gtf}')
-    gtf_dict = readGTF(snakemake.input.gtf)
-    print(f'Done loading')
-    result_list = []
-    for transcript in gtf_dict:
-        gene_name = gtf_dict[transcript]['attributes'].get('gene_name','.')
-    transcript_id = transcript
-    chromosome = gtf_dict[transcript]['seqname']
-    transcript_strand = gtf_dict[transcript]['strand']
-    transcript_start = str(gtf_dict[transcript]['start'])
-    transcript_end = str(gtf_dict[transcript]['end'])
-    cds_start = ','.join([str(i[0]) for i in gtf_dict[transcript]['CDS']]) if len(gtf_dict[transcript]['CDS'])>0 else '.'
-    cds_end = ','.join([str(i[1]) for i in gtf_dict[transcript]['CDS']]) if len(gtf_dict[transcript]['CDS'])>0 else '.'
-    exon_count = str(len(gtf_dict[transcript]['exons']))
-    exon_start = ','.join([str(i[0]) for i in gtf_dict[transcript]['exons']]) if len(gtf_dict[transcript]['exons'])>0 else '.'
-    exon_end = ','.join([str(i[1]) for i in gtf_dict[transcript]['exons']]) if len(gtf_dict[transcript]['exons'])>0 else '.'
-    transcript_length = str(gtf_dict[transcript]['transcript_length'])
-    gene_id = gtf_dict[transcript]['attributes']['gene_id']
-    coding_length = str(gtf_dict[transcript]['coding_length'])
-    transcript_biotype = gtf_dict[transcript]['attributes'].get('transcript_biotype','.')
-    transcript_version = str(gtf_dict[transcript]['attributes'].get('transcript_version','.'))
-    print(gene_name,gene_id,transcript_id)
-    result_list.append(
-        '\t'.join([gene_name,transcript_id,chromosome,transcript_strand,transcript_start,
-                    transcript_end,cds_start,cds_end,exon_count,exon_start,exon_end,transcript_length,
-                    gene_id,transcript_biotype,transcript_version,coding_length
-                    ])
-        )
+sys.stdout = open(snakemake.log.log,'w') 
+
+sys.stderr= open(snakemake.log.err, 'w')
+
+print(f'reading {snakemake.input.gtf}')
+gtf_dict = readGTF(snakemake.input.gtf)
+print(f'Done loading')
+result_list = []
+for transcript in gtf_dict:
+    gene_name = gtf_dict[transcript]['attributes'].get('gene_name','.')
+transcript_id = transcript
+chromosome = gtf_dict[transcript]['seqname']
+transcript_strand = gtf_dict[transcript]['strand']
+transcript_start = str(gtf_dict[transcript]['start'])
+transcript_end = str(gtf_dict[transcript]['end'])
+cds_start = ','.join([str(i[0]) for i in gtf_dict[transcript]['CDS']]) if len(gtf_dict[transcript]['CDS'])>0 else '.'
+cds_end = ','.join([str(i[1]) for i in gtf_dict[transcript]['CDS']]) if len(gtf_dict[transcript]['CDS'])>0 else '.'
+exon_count = str(len(gtf_dict[transcript]['exons']))
+exon_start = ','.join([str(i[0]) for i in gtf_dict[transcript]['exons']]) if len(gtf_dict[transcript]['exons'])>0 else '.'
+exon_end = ','.join([str(i[1]) for i in gtf_dict[transcript]['exons']]) if len(gtf_dict[transcript]['exons'])>0 else '.'
+transcript_length = str(gtf_dict[transcript]['transcript_length'])
+gene_id = gtf_dict[transcript]['attributes']['gene_id']
+coding_length = str(gtf_dict[transcript]['coding_length'])
+transcript_biotype = gtf_dict[transcript]['attributes'].get('transcript_biotype','.')
+transcript_version = str(gtf_dict[transcript]['attributes'].get('transcript_version','.'))
+print(gene_name,gene_id,transcript_id)
+result_list.append(
+    '\t'.join([gene_name,transcript_id,chromosome,transcript_strand,transcript_start,
+                transcript_end,cds_start,cds_end,exon_count,exon_start,exon_end,transcript_length,
+                gene_id,transcript_biotype,transcript_version,coding_length
+                ])
+    )
 os.makedirs(os.path.dirname(snakemake.output.anno),exist_ok=True)
 with open(snakemake.output.anno,'w') as f:
     f.write('\n'.join(result_list))
