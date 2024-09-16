@@ -18,6 +18,7 @@ rule glori_gtf2anno:
 rule glori_filtered_longest_transcript:
     input:
         anno="references/gloritools/annotation.tbl",
+        transcriptome_reference=config["reference"]["transcriptome_fa"],
     output:
         longest_transcript="references/gloritools/longest_transcript.list",
     log:
@@ -93,15 +94,79 @@ rule glori_build_index_transcriptome:
             ".rev.2.ebwt",
         ),
     threads: config["threads"]["gloritools_build_index"]
-    container:
-        "docker://btrspg/gloritools:latest"
+    conda:
+        "../envs/bowtie.yaml"
     log:
-        "logs/gloritools/indexing_build_index_transcriptome.log",
-        "logs/gloritools/indexing_build_index_transcriptome.err",
+        "logs/gloritools/glori_build_index_transcriptome.log",
+        "logs/gloritools/glori_build_index_transcriptome.err",
     benchmark:
-        "benchmarks/gloritools/indexing_build_index_transcriptome.txt"
+        "benchmarks/gloritools/glori_build_index_transcriptome.txt"
     script:
         "../scripts/gloritools_build_index_transcriptome.bash "
+
+
+rule glori_build_index_genome:
+    input:
+        convert_genome_reference="references/gloritools/genome_AG.fa",
+        rev_convert_genome_reference="references/gloritools/genome_rc_AG.fa",
+        raw_genome_reference=config["reference"]["genome_fa"],
+    output:
+        convert_genome_index=multiext(
+            "references/gloritools/genome_AG",
+            "chrLength.txt",
+            "chrName.txt",
+            "Genome",
+            "Log.out",
+            "SAindex",
+            "chrNameLength.txt",
+            "chrStart.txt",
+            "genomeParameters.txt",
+            "SA",
+        ),
+        rev_convert_genome_index=multiext(
+            "references/gloritools/genome_rc_AG",
+            "chrLength.txt",
+            "chrName.txt",
+            "Genome",
+            "Log.out",
+            "SAindex",
+            "chrNameLength.txt",
+            "chrStart.txt",
+            "genomeParameters.txt",
+            "SA",
+        ),
+        raw_genome_index=multiext(
+            "references/gloritools/genome",
+            "chrLength.txt",
+            "chrName.txt",
+            "Genome",
+            "Log.out",
+            "SAindex",
+            "chrNameLength.txt",
+            "chrStart.txt",
+            "genomeParameters.txt",
+            "SA",
+        ),
+    params:
+        convert_genome_prefix=lambda x, input: os.path.splitext(
+            input.convert_genome_reference
+        )[0],
+        rev_convert_genome_prefix=lambda x, input: os.path.splitext(
+            input.rev_convert_genome_reference
+        )[0],
+        raw_genome_prefix=lambda x, input: os.path.splitext(
+            input.raw_genome_reference
+        )[0],
+    threads: config["threads"]["gloritools_build_index"]
+    conda:
+        "../envs/star.yaml"
+    log:
+        "logs/gloritools/glori_build_index_genome.log",
+        "logs/gloritools/glori_build_index_genome.err",
+    benchmark:
+        "benchmarks/gloritools/glori_build_index_genome.txt"
+    script:
+        "../scripts/gloritools_build_index_genome.py"
 
 
 # rule glori_preptbl:
