@@ -14,7 +14,7 @@ raw_genome_reference=snakemake.input.raw_genome_reference
 
 convert_genome_prefix=snakemake.params.convert_genome_prefix
 rev_convert_genome_prefix=snakemake.params.rev_convert_genome_prefix
-raw_genome_prefix=snakemake.output.raw_genome_index_dir
+raw_genome_prefix=snakemake.params.raw_genome_prefix
 
 
 

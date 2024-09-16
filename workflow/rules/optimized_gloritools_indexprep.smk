@@ -135,7 +135,18 @@ rule glori_build_index_genome:
             "genomeParameters.txt",
             "SA",
         ),
-        raw_genome_index_dir=directory("references/gloritools/genome/"),
+        rev_genome_index=multiext(
+            "references/gloritools/genome/",
+            "chrLength.txt",
+            "chrName.txt",
+            "Genome",
+            "Log.out",
+            "SAindex",
+            "chrNameLength.txt",
+            "chrStart.txt",
+            "genomeParameters.txt",
+            "SA",
+        ),
     params:
         convert_genome_prefix=lambda x, input: os.path.splitext(
             input.convert_genome_reference
@@ -143,6 +154,7 @@ rule glori_build_index_genome:
         rev_convert_genome_prefix=lambda x, input: os.path.splitext(
             input.rev_convert_genome_reference
         )[0],
+        raw_genome_prefix=lambda x, input: os.path.splitext(input.rev_genome_index)[0],
     threads: config["threads"]["gloritools_build_index"]
     conda:
         "../envs/star.yaml"
