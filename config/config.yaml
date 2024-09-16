@@ -4,6 +4,7 @@ samples: config/samples.tsv
 threads:
   fastp: 16
   gloritools_build_index: 12
+  gloritools_star_mapping: 12
 
 gloritools:
   fastp: ' --dedup --dup_calc_accuracy 5 --cut_tail --cut_tail_mean_quality 20 --umi --umi_loc per_read --umi_len 10 '
