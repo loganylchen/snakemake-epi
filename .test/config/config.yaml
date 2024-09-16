@@ -3,6 +3,7 @@ samples: config/samples.tsv
 
 threads:
   fastp: 16
+  gloritools_build_index: 12
   
 
 gloritools:
