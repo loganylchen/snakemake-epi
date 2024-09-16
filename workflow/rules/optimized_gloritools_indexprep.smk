@@ -161,8 +161,8 @@ rule glori_build_index_genome:
     conda:
         "../envs/star.yaml"
     log:
-        "logs/gloritools/glori_build_index_genome.log",
-        "logs/gloritools/glori_build_index_genome.err",
+        log="logs/gloritools/glori_build_index_genome.log",
+        err="logs/gloritools/glori_build_index_genome.err",
     benchmark:
         "benchmarks/gloritools/glori_build_index_genome.txt"
     script:
