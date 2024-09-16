@@ -72,9 +72,19 @@ rule glori_converting_reference:
 rule glori_build_index_transcriptome:
     input:
         select_transcriptome_reference="references/gloritools/transcriptome_AG.fa",
+        raw_transcript_reference="references/gloritools/selected_transcriptome.fa",
     output:
         transcript_indexes=multiext(
             "references/gloritools/transcriptome_AG.fa",
+            ".1.ebwt",
+            ".2.ebwt",
+            ".3.ebwt",
+            ".4.ebwt",
+            ".rev.1.ebwt",
+            ".rev.2.ebwt",
+        ),
+        transcript2_indexes=multiext(
+            "references/gloritools/selected_transcriptome.fa",
             ".1.ebwt",
             ".2.ebwt",
             ".3.ebwt",
