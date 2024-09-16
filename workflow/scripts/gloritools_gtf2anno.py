@@ -1,5 +1,6 @@
 import sys
 import re
+import os
 
 
 ATTRIBUTE_PATTERN=re.compile('([a-z_]+) "(.+?)"[;]?')
@@ -151,6 +152,7 @@ with open(snakemake.log[0], "w") as log_f:
                     gene_id,transcript_biotype,transcript_version,coding_length
                     ])
         )
+os.makedirs(os.path.dirname(output.anno),exists_ok=True)
 with open(output.anno,'w') as f:
     f.write('\n'.join(result_list))
     
