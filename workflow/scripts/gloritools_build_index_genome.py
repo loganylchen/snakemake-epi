@@ -2,6 +2,7 @@ import pysam
 import os
 import sys
 from snakemake import shell
+import numpy as np
 
 log = snakemake.log_fmt_shell(stdout=False, stderr=True)
 

@@ -5,3 +5,4 @@ dependencies:
   - star==2.7.5c
   - samtools
   - pysam
+  - numpy
