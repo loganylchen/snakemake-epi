@@ -15,10 +15,44 @@ rule glori_gtf2anno:
         "../scripts/gloritools_gtf2anno.py"
 
 
+rule glori_filtered_longest_transcript:
+    input:
+        anno="references/gloritools/annotation.tbl",
+    output:
+        longest_transcript="references/gloritools/longest_transcript.list",
+    log:
+        log="logs/gloritools/glori_filtered_longest_transcript.log",
+        err="logs/gloritools/glori_filtered_longest_transcript.err",
+    benchmark:
+        "benchmarks/gloritools/glori_filtered_longest_transcript.txt"
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/gloritools_select_transcripts.py"
+
+
+rule glori_filter_transcriptome:
+    input:
+        transcriptome_reference=config["reference"]["transcriptome_fa"],
+        longest_transcript_list="references/gloritools/longest_transcript.list",
+    output:
+        selected_transcriptome_reference="references/gloritools/selected_transcriptome.fa",
+    log:
+        log="logs/gloritools/glori_filter_transcriptome.log",
+        err="logs/gloritools/glori_filter_transcriptome.err",
+    benchmark:
+        "benchmarks/gloritools/glori_filter_transcriptome.txt"
+    conda:
+        "../envs/samtools.yaml"
+    shell:
+        "samtools faidx {input.transcriptome_reference} -r {input.longest_transcript_list} > {output.selected_transcriptome_reference} 2>{log.err} && "
+        "echo `date` > {log.log}"
+
+
 rule glori_converting_reference:
     input:
         genome=config["reference"]["genome_fa"],
-        transcriptome=config["reference"]["transcriptome_fa"],
+        transcriptome="references/gloritools/selected_transcriptome.fa",
     output:
         genome_reference="references/gloritools/genome_AG.fa",
         genome_reference_complement="references/gloritools/genome_rc_AG.fa",
@@ -33,6 +67,31 @@ rule glori_converting_reference:
         "../envs/python.yaml"
     script:
         "../scripts/gloritools_reference_converting.py"
+
+
+rule glori_build_index_transcriptome:
+    input:
+        select_transcriptome_reference="references/gloritools/transcriptome_AG.fa",
+    output:
+        transcript_indexes=multiext(
+            "references/gloritools/transcriptome_AG.fa",
+            ".1.ebwt",
+            ".2.ebwt",
+            ".3.ebwt",
+            ".4.ebwt",
+            ".rev.1.ebwt",
+            ".rev.2.ebwt",
+        ),
+    threads: config["threads"]["gloritools_build_index"]
+    container:
+        "docker://btrspg/gloritools:latest"
+    log:
+        "logs/gloritools/indexing_build_index_transcriptome.log",
+        "logs/gloritools/indexing_build_index_transcriptome.err",
+    benchmark:
+        "benchmarks/gloritools/indexing_build_index_transcriptome.txt"
+    script:
+        "../scripts/gloritools_build_index_transcriptome.bash "
 
 
 # rule glori_preptbl:
@@ -85,37 +144,7 @@ rule glori_converting_reference:
 #         " -anno {input.annotation_tbl} "
 #         " -fafile {input.transcriptome_reference} "
 #         " --outname_prx {output.select_transcriptome_reference} 1>{log.log} 2>{log.err} "
-# rule glori_build_index_transcriptome:
-#     input:
-#         select_transcriptome_reference="references/gloritools/selected_transcriptome.fa",
-#     output:
-#         transcript_fa="references/gloritools/transcriptome_index/transcriptome.AG_conversion.fa",
-#         transcript_indexes=multiext(
-#             "references/gloritools/transcriptome_index/transcriptome.AG_conversion.fa",
-#             ".1.ebwt",
-#             ".2.ebwt",
-#             ".3.ebwt",
-#             ".4.ebwt",
-#             ".rev.1.ebwt",
-#             ".rev.2.ebwt",
-#         ),
-#         outdir=directory("references/gloritools/transcriptome_index/"),
-#     threads: config["threads"]["gloritools_build_index"]
-#     params:
-#         prefix="transcriptome",
-#     container:
-#         "docker://btrspg/gloritools:latest"
-#     log:
-#         log="logs/gloritools/indexing_build_index_transcriptome.log",
-#         err="logs/gloritools/indexing_build_index_transcriptome.err",
-#     benchmark:
-#         "benchmarks/gloritools/indexing_build_index_transcriptome.txt"
-#     shell:
-#         " python3 /opt/GLORI-tools/pipelines/build_transcriptome_index.py "
-#         " -f {input.select_transcriptome_reference} "
-#         " -p {threads} "
-#         " -o {output.outdir} "
-#         " -pre {params.prefix} 1>{log.log} 2>{log.err} "
+#
 # rule glori_build_index_genome:
 #     input:
 #         genome_reference=config["reference"]["genome_fa"],
