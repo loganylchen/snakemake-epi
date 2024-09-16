@@ -7,7 +7,7 @@ ATTRIBUTE_PATTERN=re.compile('([a-z_]+) "(.+?)"[;]?')
 
 def _parse_attribute(attribute: str):
     attribute_dict = dict()
-    for att,value in ATTRIBUTE_PATTERN.findall(attributs):
+    for att,value in ATTRIBUTE_PATTERN.findall(attribute):
         attribute_dict[att]=value
     return attribute_dict
 
@@ -82,7 +82,7 @@ def readGTF(gtf_file):
     gtf_dict = dict()
     transcript_id = None
     
-    with (gtf_file, 'r') as f:
+    with open(gtf_file, 'r') as f:
         for line in f:
             if line.startswith('#'):
                 continue
@@ -152,8 +152,8 @@ with open(snakemake.log[0], "w") as log_f:
                     gene_id,transcript_biotype,transcript_version,coding_length
                     ])
         )
-os.makedirs(os.path.dirname(output.anno),exists_ok=True)
-with open(output.anno,'w') as f:
+os.makedirs(os.path.dirname(snakemake.output.anno),exist_ok=True)
+with open(snakemake.output.anno,'w') as f:
     f.write('\n'.join(result_list))
     
 
