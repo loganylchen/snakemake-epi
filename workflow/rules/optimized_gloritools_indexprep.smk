@@ -143,7 +143,6 @@ rule glori_build_index_genome:
         rev_convert_genome_prefix=lambda x, input: os.path.splitext(
             input.rev_convert_genome_reference
         )[0],
-        
     threads: config["threads"]["gloritools_build_index"]
     conda:
         "../envs/star.yaml"
