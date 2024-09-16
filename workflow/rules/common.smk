@@ -33,7 +33,7 @@ def get_output_list_for_one_sample(sample):
 
 
 def get_final_output():
-    final_output = []
+    final_output = ["references/gloritools/annotation.tbl"]
     for sample in samples.keys():
         final_output += get_output_list_for_one_sample(sample)
     return final_output

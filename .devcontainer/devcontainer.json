@@ -6,10 +6,11 @@
         "GitHub.copilot",
         "snakemake.snakemake-lang",
         "tfehlmann.snakefmt",
-        "github.vscode-github-actions"
+        "github.vscode-github-actions",
+        "ms-toolsai.jupyter"
     ],
     "image": "snakemake/snakemake:v8.20.3",
-    "postCreateCommand": "pip install snakefmt==0.10.2",
+    "postCreateCommand": "pip install snakefmt==0.10.2 jupyterlab",
     "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind,consistency=cached",
     "workspaceFolder": "${localWorkspaceFolder}"
 }

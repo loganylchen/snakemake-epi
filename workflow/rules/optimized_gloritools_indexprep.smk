@@ -1,57 +1,71 @@
-rule glori_preptbl:
+rule glori_gtf2anno:
     input:
         gtf=config["reference"]["gtf"],
     output:
-        annotation_tbl=temp("references/gloritools/annotation.tbl"),
+        anno="references/gloritools/annotation.tbl",
     threads: 1
-    container:
-        "docker://btrspg/gloritools:latest"
     log:
-        log="logs/gloritools/indexing_gtf2anno.log",
-        err="logs/gloritools/indexing_gtf2anno.err",
+        "logs/gloritools/gtf2anno.log",
     benchmark:
-        "benchmarks/gloritools/indexing_gtf2anno.txt"
-    shell:
-        " python3 /opt/GLORI-tools/get_anno/gtf2anno.py "
-        " -i {input.gtf} "
-        " -o {output.annotation_tbl} 1>{log.log} 2>{log.err} "
+        "benchmarks/gloritools/gtf2anno.txt"
+    script:
+        "../scripts/gloritools_gtf2anno.py"
 
 
-rule glori_preptbl2:
-    input:
-        annotation_tbl="references/gloritools/annotation.tbl",
-    output:
-        annotation_tbl2="references/gloritools/annotation2.tbl",
-    threads: 1
-    container:
-        "docker://btrspg/gloritools:latest"
-    log:
-        log="logs/gloritools/indexing_preptbl2.log",
-    benchmark:
-        "benchmarks/gloritools/indexing_gtf2anno2.txt"
-    shell:
-        """awk '$3!~/_/&&$3!="na"' {input.annotation_tbl} | grep -v 'unknown_transcript'  > {output.annotation_tbl2} && echo date > {log.log}"""
+# rule glori_preptbl:
+#     input:
+#         gtf=config["reference"]["gtf"],
+#     output:
+#         annotation_tbl=temp("references/gloritools/annotation.tbl"),
+#     threads: 1
+#     container:
+#         "docker://btrspg/gloritools:latest"
+#     log:
+#         log="logs/gloritools/indexing_gtf2anno.log",
+#         err="logs/gloritools/indexing_gtf2anno.err",
+#     benchmark:
+#         "benchmarks/gloritools/indexing_gtf2anno.txt"
+#     shell:
+#         " python3 /opt/GLORI-tools/get_anno/gtf2anno.py "
+#         " -i {input.gtf} "
+#         " -o {output.annotation_tbl} 1>{log.log} 2>{log.err} "
 
 
-rule glori_select_longest_transcripts:
-    input:
-        annotation_tbl="references/gloritools/annotation2.tbl",
-        transcriptome_reference=config["reference"]["transcriptome_fa"],
-    output:
-        select_transcriptome_reference="references/gloritools/selected_transcriptome.fa",
-    threads: 1
-    container:
-        "docker://btrspg/gloritools:latest"
-    log:
-        log="logs/gloritools/indexing_select_longest_transcripts.log",
-        err="logs/gloritools/indexing_select_longest_transcripts.err",
-    benchmark:
-        "benchmarks/gloritools/indexing_select_longest_transcripts.txt"
-    shell:
-        " python3 /opt/GLORI-tools/get_anno/selected_longest_transcrpts_fa.py "
-        " -anno {input.annotation_tbl} "
-        " -fafile {input.transcriptome_reference} "
-        " --outname_prx {output.select_transcriptome_reference} 1>{log.log} 2>{log.err} "
+# rule glori_preptbl2:
+#     input:
+#         annotation_tbl="references/gloritools/annotation.tbl",
+#     output:
+#         annotation_tbl2="references/gloritools/annotation2.tbl",
+#     threads: 1
+#     container:
+#         "docker://btrspg/gloritools:latest"
+#     log:
+#         log="logs/gloritools/indexing_preptbl2.log",
+#     benchmark:
+#         "benchmarks/gloritools/indexing_gtf2anno2.txt"
+#     shell:
+#         """awk '$3!~/_/&&$3!="na"' {input.annotation_tbl} | grep -v 'unknown_transcript'  > {output.annotation_tbl2} && echo date > {log.log}"""
+
+
+# rule glori_select_longest_transcripts:
+#     input:
+#         annotation_tbl="references/gloritools/annotation2.tbl",
+#         transcriptome_reference=config["reference"]["transcriptome_fa"],
+#     output:
+#         select_transcriptome_reference="references/gloritools/selected_transcriptome.fa",
+#     threads: 1
+#     container:
+#         "docker://btrspg/gloritools:latest"
+#     log:
+#         log="logs/gloritools/indexing_select_longest_transcripts.log",
+#         err="logs/gloritools/indexing_select_longest_transcripts.err",
+#     benchmark:
+#         "benchmarks/gloritools/indexing_select_longest_transcripts.txt"
+#     shell:
+#         " python3 /opt/GLORI-tools/get_anno/selected_longest_transcrpts_fa.py "
+#         " -anno {input.annotation_tbl} "
+#         " -fafile {input.transcriptome_reference} "
+#         " --outname_prx {output.select_transcriptome_reference} 1>{log.log} 2>{log.err} "
 
 
 # rule glori_build_index_transcriptome:
@@ -85,8 +99,6 @@ rule glori_select_longest_transcripts:
 #         " -p {threads} "
 #         " -o {output.outdir} "
 #         " -pre {params.prefix} 1>{log.log} 2>{log.err} "
-
-
 # rule glori_build_index_genome:
 #     input:
 #         genome_reference=config["reference"]["genome_fa"],
@@ -115,8 +127,6 @@ rule glori_select_longest_transcripts:
 #         " -p {threads} "
 #         " -o {output.outdir}/ "
 #         " -pre genome 1>{log.log} 2>{log.err} "
-
-
 # rule glori_index_baseanno:
 #     input:
 #         annotation_tbl="references/gloritools/annotation2.tbl",
@@ -134,8 +144,6 @@ rule glori_select_longest_transcripts:
 #         " python3 /opt/GLORI-tools/get_anno/anno_to_base.py "
 #         " -i {input.annotation_tbl} "
 #         " -o {output.baseanno_tbl} 1>{log.log} 2>{log.err} "
-
-
 # rule glori_gtf2genelist:
 #     input:
 #         gtf=config["reference"]["gtf"],
@@ -156,8 +164,6 @@ rule glori_select_longest_transcripts:
 #         " -i {input.annotation_tbl} "
 #         " -f {input.transcriptome_reference} "
 #         " -o {output.gene_list} 1>{log.log} 2>{log.err} "
-
-
 # rule glori_filtered_genelist:
 #     input:
 #         gene_list="references/gloritools/genelist.tmp.tbl",
