@@ -17,7 +17,7 @@ output_prefix = snakemake.params.prefix
 star_mapping_bam_step1=f'{output_prefix}.tmp.step1_sortbyname.star.bam'
 star_mapping_bam_step2=f'{output_prefix}.tmp.step2_sortbyloc.star.bam'
 bowtie_mapping_bam_step3=f'{output_prefix}.tmp.step3.bowtie.bam'
-
+bowtie_mapping_bam_step4=f'{output_prefix}.tmp.step4_sortbyloc.bowtie.bam'
 cmd1=f'''
 STAR --runThreadN {threads} \
     --genomeDir {genome_dir} \
@@ -69,4 +69,16 @@ cmd6=f'''
 '''
 print(cmd6)
 shell(cmd6)
+
+cmd7=f'''
+samtools view -F 4 -bS -@ {threads} -h {bowtie_mapping_bam_step3} | samtools sort - -o {bowtie_mapping_bam_step4} 
+'''
+print(cmd7)
+shell(cmd7)
+
+cmd8=f'''
+samtools index {bowtie_mapping_bam_step4}
+'''
+print(cmd8)
+shell(cmd8)
 
