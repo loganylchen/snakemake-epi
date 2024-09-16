@@ -102,7 +102,7 @@ rule glori_build_index_transcriptome:
     benchmark:
         "benchmarks/gloritools/glori_build_index_transcriptome.txt"
     script:
-        "../scripts/gloritools_build_index_transcriptome.bash"
+        "../scripts/gloritools_build_index_transcriptome.py"
 
 
 rule glori_build_index_genome:
