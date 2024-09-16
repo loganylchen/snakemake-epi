@@ -97,8 +97,8 @@ rule glori_build_index_transcriptome:
     conda:
         "../envs/bowtie.yaml"
     log:
-        "logs/gloritools/glori_build_index_transcriptome.log",
-        "logs/gloritools/glori_build_index_transcriptome.err",
+        log="logs/gloritools/glori_build_index_transcriptome.log",
+        err="logs/gloritools/glori_build_index_transcriptome.err",
     benchmark:
         "benchmarks/gloritools/glori_build_index_transcriptome.txt"
     script:
