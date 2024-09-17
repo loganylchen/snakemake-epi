@@ -14,7 +14,7 @@ rule gloritools_mapping_untreated:
             "SA",
         ),
         ag_transcriptome_indexes=multiext(
-            "references/gloritools/transcriptome.fa",
+            "references/gloritools/selected_transcriptome.fa",
             ".1.ebwt",
             ".2.ebwt",
             ".3.ebwt",
@@ -22,7 +22,7 @@ rule gloritools_mapping_untreated:
             ".rev.1.ebwt",
             ".rev.2.ebwt",
         ),
-        ag_transcriptome_reference="references/gloritools/transcriptome.fa",
+        ag_transcriptome_reference="references/gloritools/selected_transcriptome.fa",
     output:
         unmapped_fastq="results/{sample}/gloritools/untreated/{sample}_1_unmapped.fq",
         unmapped_fastq2="results/{sample}/gloritools/untreated/{sample}_2_unmapped.fq",
