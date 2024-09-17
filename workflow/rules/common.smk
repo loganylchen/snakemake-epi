@@ -31,7 +31,7 @@ def get_output_list_for_one_sample(sample):
         ]
     else:
         raise ValueError(
-            f'|{samples[sample]["ToolType"]}| was not supported, {samples[sample]["ToolType"] in['gloritools ', ' patch - gloritools ']}'
+            f'|{samples[sample]["ToolType"]}| was not supported, {samples[sample]["ToolType"] in["gloritools", "patch-gloritools"]}'
         )
 
 
