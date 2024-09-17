@@ -13,7 +13,7 @@ transcriptome_index=snakemake.input.ag_transcriptome_reference
 
 unmapped_fastq=snakemake.output.unmapped_fastq
 transcriptome_unmapped_fastq=snakemake.output.unmapped_fastq2
-output_prefix = snakemake.params.prefix
+output_prefix = snakemake.params.output_prefix
 star_mapping_bam_step1=f'{output_prefix}.tmp.step1_sortbyname.star.bam'
 star_mapping_bam_step2=f'{output_prefix}.tmp.step2_sortbyloc.star.bam'
 bowtie_mapping_bam_step3=f'{output_prefix}.tmp.step3.bowtie.bam'
