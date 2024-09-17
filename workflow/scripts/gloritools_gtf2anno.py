@@ -142,6 +142,8 @@ for transcript in gtf_dict:
     exon_count = str(len(gtf_dict[transcript]['exons']))
     exon_start = ','.join([str(i[0]) for i in gtf_dict[transcript]['exons']]) if len(gtf_dict[transcript]['exons'])>0 else '.'
     exon_end = ','.join([str(i[1]) for i in gtf_dict[transcript]['exons']]) if len(gtf_dict[transcript]['exons'])>0 else '.'
+    relative_exon_start = ','.join([str(i[0]) for i in gtf_dict[transcript]['related_exons']]) if len(gtf_dict[transcript]['related_exons'])>0 else '.'
+    relative_exon_end = ','.join([str(i[1]) for i in gtf_dict[transcript]['related_exons']]) if len(gtf_dict[transcript]['related_exons'])>0 else '.'
     transcript_length = str(gtf_dict[transcript]['transcript_length'])
     gene_id = gtf_dict[transcript]['attributes']['gene_id']
     coding_length = str(gtf_dict[transcript]['coding_length'])
@@ -150,14 +152,15 @@ for transcript in gtf_dict:
     print(gene_name,gene_id,transcript_id)
     result_list.append(
         '\t'.join([gene_name,transcript_id,chromosome,transcript_strand,transcript_start,
-                    transcript_end,cds_start,cds_end,exon_count,exon_start,exon_end,transcript_length,
+                    transcript_end,cds_start,cds_end,exon_count,exon_start,exon_end,relative_exon_start,relative_exon_end,transcript_length,
                     gene_id,transcript_biotype,transcript_version,coding_length
                     ])
         )
 os.makedirs(os.path.dirname(snakemake.output.anno),exist_ok=True)
 with open(snakemake.output.anno,'w') as f:
     f.write('\t'.join(['gene_name','transcript_id','chromosome','transcript_strand','transcript_start',
-                    'transcript_end','cds_start','cds_end','exon_count','exon_start','exon_end','transcript_length',
+                    'transcript_end','cds_start','cds_end','exon_count','exon_start','exon_end','relative_exon_start','relative_exon_end',
+                    'transcript_length',
                     'gene_id','transcript_biotype','transcript_version','coding_length'])+'\n')
     f.write('\n'.join(result_list))
     
