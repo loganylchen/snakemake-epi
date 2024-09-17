@@ -97,8 +97,7 @@ rule glori_build_index_transcriptome:
     conda:
         "../envs/bowtie.yaml"
     log:
-        log="logs/gloritools/glori_build_index_transcriptome.log",
-        err="logs/gloritools/glori_build_index_transcriptome.err",
+        "logs/gloritools/glori_build_index_transcriptome.log",
     benchmark:
         "benchmarks/gloritools/glori_build_index_transcriptome.txt"
     script:
@@ -159,8 +158,7 @@ rule glori_build_index_genome:
     conda:
         "../envs/star.yaml"
     log:
-        log="logs/gloritools/glori_build_index_genome.log",
-        err="logs/gloritools/glori_build_index_genome.err",
+        "logs/gloritools/glori_build_index_genome.log",
     benchmark:
         "benchmarks/gloritools/glori_build_index_genome.txt"
     script:

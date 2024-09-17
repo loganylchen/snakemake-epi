@@ -1,8 +1,8 @@
 from snakemake import shell
 import os
 
-log = snakemake.log_fmt_shell(stdout=False, stderr=True)
-sys.stdout = open(snakemake.log.log,'w')
+log = snakemake.log_fmt_shell(stdout=True, stderr=True,append=True)
+
 
 # inputs
 fastq=snakemake.input.fastq
@@ -29,34 +29,34 @@ STAR --runThreadN {threads} \
     --outSAMattributes All --outSAMprimaryFlag AllBestScore --outMultimapperOrder Random --outSAMmultNmax 1 --outSAMtype BAM Unsorted \
     --outFilterMultimapNmax 1 \
     --outFileNamePrefix {output_prefix}.  --readFilesIn {fastq} \
-    --outSAMunmapped Within --outReadsUnmapped Fastx {log}
+    --outSAMunmapped Within --outReadsUnmapped Fastx 
 '''
-print(cmd1)
+# print(cmd1)
 shell(cmd1)
 
 cmd2 =f'''
 samtools view -F 4 -@ {threads} -h {output_prefix}.Aligned.out.bam | samtools sort -n -o {star_mapping_bam_step1}
 '''
-print(cmd2)
+# print(cmd2)
 shell(cmd2)
 
 cmd3=f'''
 mv {output_prefix}.Unmapped.out.mate1 {unmapped_fastq}
 '''
-print(cmd3)
+# print(cmd3)
 shell(cmd3)
 
 
 cmd4=f'''
 samtools view -F 4 -bS -@ {threads} -h {star_mapping_bam_step1} | samtools sort - -o {star_mapping_bam_step2} 
 '''
-print(cmd4)
+# print(cmd4)
 shell(cmd4)
 
 cmd5=f'''
 samtools index {star_mapping_bam_step2}
 '''
-print(cmd5)
+# print(cmd5)
 shell(cmd5)
 
 
@@ -67,18 +67,18 @@ cmd6=f'''
     -x {transcriptome_index} {unmapped_fastq}  \
     -S {bowtie_mapping_bam_step3}  --un  {unmapped_fastq} {log}'
 '''
-print(cmd6)
+# print(cmd6)
 shell(cmd6)
 
 cmd7=f'''
 samtools view -F 4 -bS -@ {threads} -h {bowtie_mapping_bam_step3} | samtools sort - -o {bowtie_mapping_bam_step4} 
 '''
-print(cmd7)
+# print(cmd7)
 shell(cmd7)
 
 cmd8=f'''
 samtools index {bowtie_mapping_bam_step4}
 '''
-print(cmd8)
+# print(cmd8)
 shell(cmd8)
 

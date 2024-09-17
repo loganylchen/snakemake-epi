@@ -4,9 +4,8 @@ import sys
 from snakemake import shell
 import numpy as np
 
-log = snakemake.log_fmt_shell(stdout=False, stderr=True)
+log = snakemake.log_fmt_shell(stdout=True, stderr=True,append=True)
 
-sys.stdout = open(snakemake.log.log,'w')
 threads=snakemake.threads
 
 convert_genome_reference=snakemake.input.convert_genome_reference
@@ -26,7 +25,7 @@ STAR --runMode genomeGenerate -runThreadN {threads} \
         --genomeSAindexNbases {int(round(min(14, np.log2(sum(pysam.FastaFile(rev_convert_genome_reference).lengths))/2 - 1)))} \
         --limitGenomeGenerateRAM 84807429045 {log}
 '''
-print(cmd)
+# print(cmd)
 shell(cmd)
 
 cmd = f'''
@@ -36,7 +35,7 @@ STAR --runMode genomeGenerate -runThreadN {threads} \
         --genomeSAindexNbases {int(round(min(14, np.log2(sum(pysam.FastaFile(convert_genome_reference).lengths))/2 - 1)))} \
         --limitGenomeGenerateRAM 84807429045 {log}
 '''
-print(cmd)
+# print(cmd)
 shell(cmd)
 
 cmd = f'''
@@ -46,7 +45,7 @@ STAR --runMode genomeGenerate -runThreadN {threads} \
         --genomeSAindexNbases {int(round(min(14, np.log2(sum(pysam.FastaFile(raw_genome_reference).lengths))/2 - 1)))} \
         --limitGenomeGenerateRAM 84807429045 {log}
 '''
-print(cmd)
+# print(cmd)
 shell(cmd)
 
 

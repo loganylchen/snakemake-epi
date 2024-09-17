@@ -34,8 +34,7 @@ rule gloritools_genome_mapping_treated:
     conda:
         "../envs/star.yaml"
     log:
-        log="logs/gloritools/{sample}_gloritools_genome_mapping.log",
-        err="logs/gloritools/{sample}_gloritools_genome_mapping.err",
+        "logs/gloritools/{sample}_gloritools_genome_mapping.log",
     benchmark:
         "benchmarks/gloritools/{sample}_gloritools_genome_mapping.txt"
     script:
