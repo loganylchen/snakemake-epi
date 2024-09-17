@@ -44,7 +44,7 @@ rule glori_filter_transcriptome:
     benchmark:
         "benchmarks/gloritools/glori_filter_transcriptome.txt"
     conda:
-        "../envs/samtools.yaml"
+        "../envs/mapping.yaml"
     shell:
         "samtools faidx {input.transcriptome_reference} -r {input.longest_transcript_list} > {output.selected_transcriptome_reference} 2>{log.err} && "
         "echo `date` > {log.log}"
@@ -95,7 +95,7 @@ rule glori_build_index_transcriptome:
         ),
     threads: config["threads"]["gloritools_build_index"]
     conda:
-        "../envs/bowtie.yaml"
+        "../envs/mapping.yaml"
     log:
         "logs/gloritools/glori_build_index_transcriptome.log",
     benchmark:
@@ -156,7 +156,7 @@ rule glori_build_index_genome:
         raw_genome_prefix=lambda x, output: os.path.dirname(output.rev_genome_index[0]),
     threads: config["threads"]["gloritools_build_index"]
     conda:
-        "../envs/star.yaml"
+        "../envs/mapping.yaml"
     log:
         "logs/gloritools/glori_build_index_genome.log",
     benchmark:
