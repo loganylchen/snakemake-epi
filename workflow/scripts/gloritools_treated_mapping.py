@@ -18,6 +18,8 @@ star_mapping_bam_step1=f'{output_prefix}.tmp.step1_sortbyname.star.bam'
 star_mapping_bam_step2=f'{output_prefix}.tmp.step2_sortbyloc.star.bam'
 bowtie_mapping_bam_step3=f'{output_prefix}.tmp.step3.bowtie.bam'
 bowtie_mapping_bam_step4=f'{output_prefix}.tmp.step4_sortbyloc.bowtie.bam'
+
+extra_para=' --readFilesCommand zcat ' if fastq.endswith('.gz') else ''
 cmd1=f'''
 STAR --runThreadN {threads} \
     --genomeDir {genome_dir} \
@@ -27,7 +29,7 @@ STAR --runThreadN {threads} \
     --outFilterMatchNminOverLread 0.5 \
     --seedSearchStartLmax 30 \
     --outSAMattributes All --outSAMprimaryFlag AllBestScore --outMultimapperOrder Random --outSAMmultNmax 1 --outSAMtype BAM Unsorted \
-    --outFilterMultimapNmax 1 \
+    --outFilterMultimapNmax 1 {extra_para} \
     --outFileNamePrefix {output_prefix}.  --readFilesIn {fastq} \
     --outSAMunmapped Within --outReadsUnmapped Fastx 
 '''
