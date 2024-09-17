@@ -64,10 +64,10 @@ shell(cmd5)
 
 
 cmd6=f'''
-'bowtie -k 1 -m 1  -v 2  \
+bowtie -k 1 -m 1  -v 2  \
     --best --strata -p {threads}  \
     -x {transcriptome_index} {unmapped_fastq}  \
-    -S {bowtie_mapping_bam_step3}  --un  {unmapped_fastq} {log}'
+    -S {bowtie_mapping_bam_step3}  --un  {unmapped_fastq} {log}
 '''
 # print(cmd6)
 shell(cmd6)
