@@ -7,8 +7,8 @@ log = snakemake.log_fmt_shell(stdout=True, stderr=True,append=True)
 # inputs
 fastq=snakemake.input.fastq
 threads = snakemake.threads
-genome_dir = os.path.dirname(snakemake.input.ag_genome_indexes[0])
-transcriptome_index=snakemake.input.ag_transcriptome_reference
+genome_dir = os.path.dirname(snakemake.input.genome_indexes[0])
+transcriptome_index=snakemake.input.transcriptome_reference
 # outputs
 
 unmapped_fastq=snakemake.output.unmapped_fastq

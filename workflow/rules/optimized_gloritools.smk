@@ -1,7 +1,7 @@
 rule gloritools_mapping_untreated:
     input:
         fastq="results/{sample}/gloritools/cleandata/{sample}_rmdup.fq.gz",
-        ag_genome_indexes=multiext(
+        genome_indexes=multiext(
             "references/gloritools/genome/",
             "chrLength.txt",
             "chrName.txt",
@@ -13,7 +13,7 @@ rule gloritools_mapping_untreated:
             "genomeParameters.txt",
             "SA",
         ),
-        ag_transcriptome_indexes=multiext(
+        transcriptome_indexes=multiext(
             "references/gloritools/selected_transcriptome.fa",
             ".1.ebwt",
             ".2.ebwt",
@@ -22,7 +22,7 @@ rule gloritools_mapping_untreated:
             ".rev.1.ebwt",
             ".rev.2.ebwt",
         ),
-        ag_transcriptome_reference="references/gloritools/selected_transcriptome.fa",
+        transcriptome_reference="references/gloritools/selected_transcriptome.fa",
     output:
         unmapped_fastq="results/{sample}/gloritools/untreated/{sample}_1_unmapped.fq",
         unmapped_fastq2="results/{sample}/gloritools/untreated/{sample}_2_unmapped.fq",
