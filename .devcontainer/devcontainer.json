@@ -10,7 +10,7 @@
         "ms-toolsai.jupyter"
     ],
     "image": "snakemake/snakemake:v8.20.3",
-    "postCreateCommand": "pip install snakefmt==0.10.2 jupyterlab",
+    "postCreateCommand": "pip install snakefmt==0.10.2 jupyterlab pysam",
     "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind,consistency=cached",
     "workspaceFolder": "${localWorkspaceFolder}"
 }

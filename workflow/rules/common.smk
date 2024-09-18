@@ -28,6 +28,7 @@ def get_output_list_for_one_sample(sample):
         return [
             f"results/{sample}/gloritools/cleandata/{sample}_rmdup.json",
             f"results/{sample}/gloritools/untreated/{sample}_1_unmapped.fq",
+            f"results/{sample}/gloritools/treated/{sample}_1_unmapped.fq",
         ]
     else:
         raise ValueError(
