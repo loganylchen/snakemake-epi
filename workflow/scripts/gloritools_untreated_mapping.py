@@ -31,7 +31,7 @@ STAR --runThreadN {threads} \
     --outSAMattributes All --outSAMprimaryFlag AllBestScore --outMultimapperOrder Random --outSAMmultNmax 1 --outSAMtype BAM Unsorted \
     --outFilterMultimapNmax 1 {extra_para} \
     --outFileNamePrefix {output_prefix}.  --readFilesIn {fastq} \
-    --outSAMunmapped Within --outReadsUnmapped Fastx 
+    --outSAMunmapped Within --outReadsUnmapped Fastx {log}
 '''
 # print(cmd1)
 shell(cmd1)
