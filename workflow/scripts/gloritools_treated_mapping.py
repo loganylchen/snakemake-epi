@@ -57,7 +57,7 @@ STAR --runThreadN {threads} \
     --seedSearchStartLmax 30 \
     --outSAMattributes All --outSAMprimaryFlag AllBestScore --outMultimapperOrder Random --outSAMmultNmax 1 --outSAMtype BAM Unsorted \
     --outFilterMultimapNmax 1 {extra_para} \
-    --outFileNamePrefix {output_prefix}.  --readFilesIn {fastq} \
+    --outFileNamePrefix {output_prefix}.  --readFilesIn {ag_change_fastq} \
     --outSAMunmapped Within --outReadsUnmapped Fastx {log}
 '''
 # print(cmd1)
@@ -76,17 +76,17 @@ mv {output_prefix}.Unmapped.out.mate1 {unmapped_fastq}
 shell(cmd3)
 
 
-# cmd4=f'''
-# samtools view -F 4 -bS -@ {threads} -h {star_mapping_bam_step1} | samtools sort - -o {star_mapping_bam_step2} 
-# '''
-# # print(cmd4)
-# shell(cmd4)
+cmd4=f'''
+samtools view -F 4 -bS -@ {threads} -h {star_mapping_bam_step1} | samtools sort - -o {star_mapping_bam_step2} 
+'''
+# print(cmd4)
+shell(cmd4)
 
-# cmd5=f'''
-# samtools index {star_mapping_bam_step2}
-# '''
-# # print(cmd5)
-# shell(cmd5)
+cmd5=f'''
+samtools index {star_mapping_bam_step2}
+'''
+# print(cmd5)
+shell(cmd5)
 
 
 
