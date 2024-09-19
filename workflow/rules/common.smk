@@ -30,6 +30,7 @@ def get_output_list_for_one_sample(sample):
             f"results/{sample}/gloritools/untreated/{sample}.star.bam",
             f"results/{sample}/gloritools/untreated/{sample}.bowtie.bam",
             f"results/{sample}/gloritools/treated/{sample}.star.ag.bam",
+            f"results/{sample}/gloritools/treated/{sample}.star.rvs.bam",
         ]
     else:
         raise ValueError(

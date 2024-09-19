@@ -97,6 +97,39 @@ rule gloritools_star_ag_mapping_treated:
         "../scripts/gloritools_treated_star_ag_mapping.py"
 
 
+rule gloritools_star_rvs_mapping_treated:
+    input:
+        fastq="results/{sample}/gloritools/treated/{sample}_star_ag_unmapped.fq",
+        rvs_genome_indexes=multiext(
+            "references/gloritools/genome_rc_AG/",
+            "chrLength.txt",
+            "chrName.txt",
+            "Genome",
+            "Log.out",
+            "SAindex",
+            "chrNameLength.txt",
+            "chrStart.txt",
+            "genomeParameters.txt",
+            "SA",
+        ),
+    output:
+        rvs_genome_unmapped_fastq="results/{sample}/gloritools/treated/{sample}_star_rvs_unmapped.fq",
+        rvs_genome_star_bam="results/{sample}/gloritools/treated/{sample}.star.rvs.bam",
+    params:
+        output_prefix=lambda w, output: output.rvs_genome_unmapped_fastq.replace(
+            "_star_rvs_unmapped.fq", ""
+        ),
+    threads: config["threads"]["gloritools_star_mapping"]
+    conda:
+        "../envs/mapping.yaml"
+    log:
+        "logs/gloritools/{sample}_treated_gloritools_star_rvs_mapping.log",
+    benchmark:
+        "benchmarks/gloritools/{sample}_treated_gloritools_star_rvs_mapping.txt"
+    script:
+        "../scripts/gloritools_treated_star_rvs_mapping.py"
+
+
 # rule gloritools_mapping_treated:
 #     input:
 #         fastq="results/{sample}/gloritools/cleandata/{sample}_rmdup.fq.gz",
