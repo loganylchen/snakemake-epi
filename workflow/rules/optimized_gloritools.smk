@@ -145,7 +145,6 @@ rule gloritools_bowtie_ag_mapping_treated:
             ".rev.2.ebwt",
         ),
         ag_transcriptome_reference="references/gloritools/transcriptome_AG.fa",
-        info_json="results/{sample}/gloritools/treated/{sample}_AG_changed_info.json",
     output:
         ag_transcriptome_fastq="results/{sample}/gloritools/treated/{sample}_bowtie_ag_unmapped.fq",
         ag_transcriptome_bowtie_bam="results/{sample}/gloritools/treated/{sample}.bowtie.ag.bam",
