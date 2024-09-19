@@ -100,6 +100,7 @@ rule gloritools_star_ag_mapping_treated:
 rule gloritools_star_rvs_mapping_treated:
     input:
         fastq="results/{sample}/gloritools/treated/{sample}_star_ag_unmapped.fq",
+        info_json="results/{sample}/gloritools/treated/{sample}_AG_changed_info.json",
         rvs_genome_indexes=multiext(
             "references/gloritools/genome_rc_AG/",
             "chrLength.txt",

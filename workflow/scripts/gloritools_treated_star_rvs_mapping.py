@@ -4,7 +4,7 @@ import pysam
 import re
 import json
 import gzip
-
+from Bio.Seq import reverse_complement
 
 log = snakemake.log_fmt_shell(stdout=True, stderr=True,append=True)
 
@@ -27,7 +27,10 @@ def recover_A(readname_sorted_bam,output_bam,index_json):
                 raise ValueError(f'{read.query_name} was duplicated in the {readname_sorted_bam}')
             else:
                 qualities = read.query_qualities
-                read.query_sequence = _multi_replace(read.query_sequence,info_dict[read.query_name])
+                if read.is_forward:
+                    read.query_sequence = _multi_replace(read.query_sequence,info_dict[read.query_name])
+                else:
+                    read.query_sequence = reverse_complement(_multi_replace(read.get_forward_sequence(),info_dict[read.query_name]))
                 read.query_qualities = qualities
                 previous_read_name =read.query_name
                 output_bam.write(read)
@@ -37,7 +40,7 @@ def recover_A(readname_sorted_bam,output_bam,index_json):
 fastq=snakemake.input.fastq
 threads = snakemake.threads
 rvs_genome_dir = os.path.dirname(snakemake.input.rvs_genome_indexes[0])
-
+info_json=snakemake.input.info_json
 # outputs
 
 rvs_genome_unmapped_fastq = snakemake.output.rvs_genome_unmapped_fastq
@@ -89,7 +92,7 @@ recover_A(readname_sorted_bam,convered_bam,info_json)
 
 
 cmd3=f'''
-mv {output_prefix}.Unmapped.out.mate1 {rvs_genome_unmapped_fastq}
+mv {output_prefix}.rvs.Unmapped.out.mate1 {rvs_genome_unmapped_fastq}
 '''
 # print(cmd3)
 shell(cmd3)

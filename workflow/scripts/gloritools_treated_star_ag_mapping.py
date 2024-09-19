@@ -4,6 +4,7 @@ import pysam
 import re
 import json
 import gzip
+from Bio.Seq import reverse_complement
 
 
 log = snakemake.log_fmt_shell(stdout=True, stderr=True,append=True)
@@ -39,7 +40,10 @@ def recover_A(readname_sorted_bam,output_bam,index_json):
                 raise ValueError(f'{read.query_name} was duplicated in the {readname_sorted_bam}')
             else:
                 qualities = read.query_qualities
-                read.query_sequence = _multi_replace(read.query_sequence,info_dict[read.query_name])
+                if read.is_forward:
+                    read.query_sequence = _multi_replace(read.query_sequence,info_dict[read.query_name])
+                else:
+                    read.query_sequence = reverse_complement(_multi_replace(read.get_forward_sequence(),info_dict[read.query_name]))
                 read.query_qualities = qualities
                 previous_read_name =read.query_name
                 output_bam.write(read)
