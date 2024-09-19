@@ -62,47 +62,41 @@ rule gloritools_bowtie_mapping_untreated:
         "../scripts/gloritools_untreated_bowtie_mapping.py"
 
 
-# rule gloritools_mapping_untreated:
-#     input:
-#         fastq="results/{sample}/gloritools/cleandata/{sample}_rmdup.fq.gz",
-#         genome_indexes=multiext(
-#             "references/gloritools/genome/",
-#             "chrLength.txt",
-#             "chrName.txt",
-#             "Genome",
-#             "Log.out",
-#             "SAindex",
-#             "chrNameLength.txt",
-#             "chrStart.txt",
-#             "genomeParameters.txt",
-#             "SA",
-#         ),
-#         transcriptome_indexes=multiext(
-#             "references/gloritools/selected_transcriptome.fa",
-#             ".1.ebwt",
-#             ".2.ebwt",
-#             ".3.ebwt",
-#             ".4.ebwt",
-#             ".rev.1.ebwt",
-#             ".rev.2.ebwt",
-#         ),
-#         transcriptome_reference="references/gloritools/selected_transcriptome.fa",
-#     output:
-#         unmapped_fastq="results/{sample}/gloritools/untreated/{sample}_1_unmapped.fq",
-#         unmapped_fastq2="results/{sample}/gloritools/untreated/{sample}_2_unmapped.fq",
-#     params:
-#         output_prefix=lambda w, output: output.unmapped_fastq.replace(
-#             "_1_unmapped.fq", ""
-#         ),
-#     threads: config["threads"]["gloritools_star_mapping"]
-#     conda:
-#         "../envs/mapping.yaml"
-#     log:
-#         "logs/gloritools/{sample}_untreated_gloritools_mapping.log",
-#     benchmark:
-#         "benchmarks/gloritools/{sample}_untreated_gloritools_mapping.txt"
-#     script:
-#         "../scripts/gloritools_untreated_mapping.py"
+rule gloritools_star_ag_mapping_treated:
+    input:
+        fastq="results/{sample}/gloritools/cleandata/{sample}_rmdup.fq.gz",
+        ag_genome_indexes=multiext(
+            "references/gloritools/genome_AG/",
+            "chrLength.txt",
+            "chrName.txt",
+            "Genome",
+            "Log.out",
+            "SAindex",
+            "chrNameLength.txt",
+            "chrStart.txt",
+            "genomeParameters.txt",
+            "SA",
+        ),
+    output:
+        ag_genome_unmapped_fastq="results/{sample}/gloritools/treated/{sample}_star_ag_unmapped.fq",
+        ag_change_fastq="results/{sample}/gloritools/treated/{sample}_AG.fq.gz",
+        info_json="results/{sample}/gloritools/treated/{sample}_AG_changed_info.json",
+        ag_genome_star_bam="results/{sample}/gloritools/treated/{sample}.star.ag.bam",
+    params:
+        output_prefix=lambda w, output: output.ag_genome_unmapped_fastq.replace(
+            "_star_ag_unmapped.fq", ""
+        ),
+    threads: config["threads"]["gloritools_star_mapping"]
+    conda:
+        "../envs/mapping.yaml"
+    log:
+        "logs/gloritools/{sample}_treated_gloritools_star_ag_mapping.log",
+    benchmark:
+        "benchmarks/gloritools/{sample}_treated_gloritools_star_ag_mapping.txt"
+    script:
+        "../scripts/gloritools_treated_star_ag_mapping.py"
+
+
 # rule gloritools_mapping_treated:
 #     input:
 #         fastq="results/{sample}/gloritools/cleandata/{sample}_rmdup.fq.gz",
