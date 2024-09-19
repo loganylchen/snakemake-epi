@@ -27,8 +27,8 @@ def get_output_list_for_one_sample(sample):
     elif samples[sample]["ToolType"] == "patch-gloritools":
         return [
             f"results/{sample}/gloritools/cleandata/{sample}_rmdup.json",
-            f"results/{sample}/gloritools/untreated/{sample}_1_unmapped.fq",
-            f"results/{sample}/gloritools/treated/{sample}_1_unmapped.fq",
+            f"results/{sample}/gloritools/untreated/{sample}.star.bam",
+            f"results/{sample}/gloritools/untreated/{sample}.bowtie.bam",
         ]
     else:
         raise ValueError(
