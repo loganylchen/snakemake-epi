@@ -5,6 +5,7 @@ import re
 import json
 import gzip
 
+
 log = snakemake.log_fmt_shell(stdout=True, stderr=True,append=True)
 
 
@@ -19,23 +20,69 @@ def A2G_change_fastq(raw_fastq,out_fastq,info):
             outfq.write(str(entry)+'\n')
     with open(info,'w') as f:
         f.write(json.dumps(change_info,indent=4))
-        
+
+
+def _multi_replace(string,index_list,nucleotide='A'):
+    string_list = [x for x in string]
+    for idx in index_list:
+        string_list[idx]=nucleotide
+    return ''.join(string_list)
+
+def recover_A(readname_sorted_bam,output_bam,index_json): 
+    with open(index_json) as f:
+        info_dict = json.load(f)
+    
+    with pysam.AlignmentFile(readname_sorted_bam) as input_bam, pysam.AlignmentFile(output_bam,'wb',template=input_bam) as output_bam:
+        previous_read_name=None
+        for read in input_bam:
+            if read.query_name == previous_read_name:
+                raise ValueError(f'{read.query_name} was duplicated in the {readname_sorted_bam}')
+            else:
+                qualities = read.query_qualities
+                read.query_sequence = _multi_replace(read.query_sequence,info_dict[read.query_name])
+                read.query_qualities = qualities
+                previous_read_name =read.query_name
+                output_bam.write(read)
+    print('Done the convertion')
+
+
+
+
+
 # inputs
 fastq=snakemake.input.fastq
 threads = snakemake.threads
 ag_genome_dir = os.path.dirname(snakemake.input.ag_genome_indexes[0])
+ag_rvs_genome_dir = os.path.dirname(snakemake.input.ag_rvs_genome_indexes[0])
 ag_transcriptome_index=snakemake.input.ag_transcriptome_reference
+
+
 # outputs
 ag_change_fastq=snakemake.output.ag_change_fastq
 info_json = snakemake.output.info_json
+ag_genome_unmapped_fastq = snakemake.output.ag_genome_unmapped_fastq
+ag_rvs_genome_unmapped_fastq = snakemake.output.ag_rvs_genome_unmapped_fastq
+ag_transcriptome_unmapped_fastq=snakemake.output.ag_transcriptome_unmapped_fastq
 
-unmapped_fastq=snakemake.output.unmapped_fastq
-transcriptome_unmapped_fastq=snakemake.output.unmapped_fastq2
+
+
+star_mapping_bam=f"{output_prefix}.Aligned.out.bam"
+step1_star_mapping_namesorted_bam=f'{output_prefix}.tmp.step1_sortbyname.star.bam'
+step2_star_mapping_ag_converted_bam=f'{output_prefix}.tmp.step2_agconverted.star.bam'
+step3_star_mapping_locsorted_bam=f'{output_prefix}.tmp.step3_sortbyloc.star.bam'
+
+star_mapping_rvs_bam=f"{output_prefix}.rvs.Aligned.out.bam"
+
+step4_star_mappingrvs_namesorted_bam=f'{output_prefix}.tmp.step4_sortbyname.starrvs.bam'
+step5_star_mappingrvs_ag_converted_bam=f'{output_prefix}.tmp.step5_agconverted.starrvs.bam'
+step6_star_mappingrvs_locsorted_bam=f'{output_prefix}.tmp.step6_sortbyloc.starrvs.bam'
+
+
+
+step7_bowtie_mapping_bam=f'{output_prefix}.tmp.step4.bowtie.bam'
+step8_bowtie_mapping_bam=f'{output_prefix}.tmp.step5_sortbyloc.bowtie.bam'
+
 output_prefix = snakemake.params.output_prefix
-star_mapping_bam_step1=f'{output_prefix}.tmp.step1_sortbyname.star.bam'
-star_mapping_bam_step2=f'{output_prefix}.tmp.step2_sortbyloc.star.bam'
-bowtie_mapping_bam_step3=f'{output_prefix}.tmp.step3.bowtie.bam'
-bowtie_mapping_bam_step4=f'{output_prefix}.tmp.step4_sortbyloc.bowtie.bam'
 
 
 # prepare
@@ -62,31 +109,42 @@ STAR --runThreadN {threads} \
 '''
 # print(cmd1)
 shell(cmd1)
-
+# read unmapped (0x4)
+# read reverse strand (0x10)
+# not primary alignment (0x100)
+# supplementary alignment (0x800)
+# 2324
 cmd2 =f'''
-samtools view -F 20 -@ {threads} -h {output_prefix}.Aligned.out.bam | samtools sort -n -o {star_mapping_bam_step1}
+samtools view -F 2324 -@ {threads} -h {star_mapping_bam} | samtools sort -n -o {step1_star_mapping_namesorted_bam}
 '''
 # print(cmd2)
 shell(cmd2)
 
+
+recover_A(step1_star_mapping_namesorted_bam,step2_star_mapping_ag_converted_bam,info_json)
+
+
 cmd3=f'''
-mv {output_prefix}.Unmapped.out.mate1 {unmapped_fastq}
+mv {output_prefix}.Unmapped.out.mate1 {ag_genome_unmapped_fastq}
 '''
 # print(cmd3)
 shell(cmd3)
 
 
 cmd4=f'''
-samtools view -F 4 -bS -@ {threads} -h {star_mapping_bam_step1} | samtools sort - -o {star_mapping_bam_step2} 
+samtools view -F 4 -bS -@ {threads} -h {step2_star_mapping_ag_converted_bam} | samtools sort - -o {step3_star_mapping_locsorted_bam} 
 '''
 # print(cmd4)
 shell(cmd4)
 
 cmd5=f'''
-samtools index {star_mapping_bam_step2}
+samtools index {step3_star_mapping_locsorted_bam}
 '''
 # print(cmd5)
 shell(cmd5)
+
+
+
 
 
 

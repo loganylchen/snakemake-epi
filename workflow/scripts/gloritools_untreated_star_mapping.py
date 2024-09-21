@@ -29,7 +29,8 @@ STAR --runThreadN {threads} \
     --outFilterScoreMinOverLread 0.5 \
     --outFilterMatchNminOverLread 0.5 \
     --seedSearchStartLmax 30 \
-    --outSAMattributes All --outSAMprimaryFlag AllBestScore --outMultimapperOrder Random --outSAMmultNmax 1 --outSAMtype BAM Unsorted \
+    --outSAMattributes All --outSAMprimaryFlag AllBestScore \
+    --outMultimapperOrder Random --outSAMmultNmax 1 --outSAMtype BAM Unsorted \
     --outFilterMultimapNmax 1 {extra_para} \
     --outFileNamePrefix {output_prefix}.  --readFilesIn {fastq} \
     --outSAMunmapped Within --outReadsUnmapped Fastx {log}
@@ -38,15 +39,15 @@ STAR --runThreadN {threads} \
 shell(cmd1)
 
 cmd2 =f'''
-samtools view -F 4 -@ {threads} -h {star_raw_bam} | samtools sort - -@ {threads} -o {genome_star_bam}
+samtools view -F 4 -@ {threads} -h {star_raw_bam} | samtools sort -@ {threads} -o {genome_star_bam} {log}
 '''
 shell(cmd2)
 cmd3=f'''
-mv {output_prefix}.Unmapped.out.mate1 {genome_unmapped_fastq}
+mv {output_prefix}.Unmapped.out.mate1 {genome_unmapped_fastq} {log}
 '''
 shell(cmd3)
 cmd4=f'''
-samtools index {genome_star_bam}
+samtools index {genome_star_bam} {log}
 '''
 shell(cmd4)
 
