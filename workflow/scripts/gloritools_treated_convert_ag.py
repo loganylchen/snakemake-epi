@@ -4,6 +4,7 @@ import json
 import pgzip
 from Bio.Seq import reverse_complement
 import time
+import pysam
 
 
 sys.stdout = open(snakemake.log.log,'w') 
