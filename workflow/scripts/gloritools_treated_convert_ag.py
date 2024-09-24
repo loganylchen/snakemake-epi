@@ -19,7 +19,7 @@ ag_change_fastq=snakemake.output.ag_change_fastq
 info_json = snakemake.output.info_json
 
 
-
+BATCH_SIZE=5000000
 
 def _format_seconds(sec):
     hours = sec // 3600  
@@ -40,17 +40,17 @@ def A2G_change_fastq(raw_fastq,out_fastq,info,threads=threads):
             entry.sequence=entry.sequence.replace('A','G')
             change_info[entry.name]=A_sites
             outfq.write(str(entry)+'\n')
-            if n %10000 ==0:
+            if n %BATCH_SIZE ==0:
                 end_time = time.time()
                 h,m,s = _format_seconds(end_time-start_time)
                 print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-                print(f'{n} reads has been converted, the last 10000 reads used: {h}:{m}:{s}')
+                print(f'{n} reads has been converted, the last {BATCH_SIZE} reads used: {h}:{m}:{s}')
                 start_time=time.time()
 
     end_time = time.time()
     h,m,s = _format_seconds(end_time-start_time)
     print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-    print(f'{n} reads has been converted, the last 10000 reads used: {h}:{m}:{s}')
+    print(f'{n} reads has been converted, the last {BATCH_SIZE} reads used: {h}:{m}:{s}')
     start_time=time.time()
     
     with open(info,'w') as f:
