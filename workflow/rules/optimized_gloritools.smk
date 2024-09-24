@@ -72,7 +72,8 @@ rule gloritools_ag_convertion:
     conda:
         "../envs/mapping.yaml"
     log:
-        "logs/gloritools/{sample}_gloritools_ag_convertion.log",
+        log="logs/gloritools/{sample}_gloritools_ag_convertion.log",
+        err="logs/gloritools/{sample}_gloritools_ag_convertion.err",
     benchmark:
         "benchmarks/gloritools/{sample}_gloritools_ag_convertion.txt"
     script:

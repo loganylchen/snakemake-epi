@@ -62,7 +62,7 @@ jobs:
       shell: micromamba-shell {0}
     - name: list all the files
       run: |
-        ls -lthrR 
+        ls -lthrR .test/results/
     # - name: Test workflow
     #   uses: snakemake/snakemake-github-action@v1.24.0
     #   with:
