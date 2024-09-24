@@ -3,17 +3,35 @@ import os
 import pysam
 import re
 import json
-import gzip
+import pgzip
 from Bio.Seq import reverse_complement
 
 
 log = snakemake.log_fmt_shell(stdout=True, stderr=True,append=True)
+# inputs
+fastq=snakemake.input.fastq
+threads = snakemake.threads
+ag_genome_dir = os.path.dirname(snakemake.input.ag_genome_indexes[0])
+
+# outputs
+ag_change_fastq=snakemake.output.ag_change_fastq
+info_json = snakemake.output.info_json
+ag_genome_unmapped_fastq = snakemake.output.ag_genome_unmapped_fastq
+ag_genome_star_bam=snakemake.output.ag_genome_star_bam
 
 
+# prefix
+output_prefix = snakemake.params.output_prefix
 
-def A2G_change_fastq(raw_fastq,out_fastq,info):
+# temp
+raw_star_bam=f"{output_prefix}.Aligned.out.bam"
+readname_sorted_bam=f"{output_prefix}.Aligned.ReadnameSorted.bam"
+convered_bam=f"{output_prefix}.Aligned.Converted.bam"
+
+
+def A2G_change_fastq(raw_fastq,out_fastq,info,threads=threads):
     change_info = dict()
-    with pysam.FastxFile(raw_fastq) as fastq, gzip.open(out_fastq,'wt') as outfq:
+    with pysam.FastxFile(raw_fastq) as fastq, pgzip.open(out_fastq,'wt',thread=threads, blocksize=2*10**8) as outfq:
         for entry in fastq:
             A_sites = [m.start() for m in re.finditer('A', entry.sequence)]
             entry.sequence=entry.sequence.replace('A','G')
@@ -49,25 +67,7 @@ def recover_A(readname_sorted_bam,output_bam,index_json):
                 output_bam.write(read)
     print('Done the convertion')
 
-# inputs
-fastq=snakemake.input.fastq
-threads = snakemake.threads
-ag_genome_dir = os.path.dirname(snakemake.input.ag_genome_indexes[0])
 
-# outputs
-ag_change_fastq=snakemake.output.ag_change_fastq
-info_json = snakemake.output.info_json
-ag_genome_unmapped_fastq = snakemake.output.ag_genome_unmapped_fastq
-ag_genome_star_bam=snakemake.output.ag_genome_star_bam
-
-
-# prefix
-output_prefix = snakemake.params.output_prefix
-
-# temp
-raw_star_bam=f"{output_prefix}.Aligned.out.bam"
-readname_sorted_bam=f"{output_prefix}.Aligned.ReadnameSorted.bam"
-convered_bam=f"{output_prefix}.Aligned.Converted.bam"
 
 
 # prepare
