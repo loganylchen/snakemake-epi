@@ -9,13 +9,13 @@ from Bio.Seq import reverse_complement
 
 log = snakemake.log_fmt_shell(stdout=True, stderr=True,append=True)
 # inputs
-fastq=snakemake.input.fastq
+ag_change_fastq=snakemake.input.ag_change_fastq
+info_json = snakemake.input.info_json
 threads = snakemake.threads
 ag_genome_dir = os.path.dirname(snakemake.input.ag_genome_indexes[0])
 
 # outputs
-ag_change_fastq=snakemake.output.ag_change_fastq
-info_json = snakemake.output.info_json
+
 ag_genome_unmapped_fastq = snakemake.output.ag_genome_unmapped_fastq
 ag_genome_star_bam=snakemake.output.ag_genome_star_bam
 
@@ -28,17 +28,6 @@ raw_star_bam=f"{output_prefix}.Aligned.out.bam"
 readname_sorted_bam=f"{output_prefix}.Aligned.ReadnameSorted.bam"
 convered_bam=f"{output_prefix}.Aligned.Converted.bam"
 
-
-def A2G_change_fastq(raw_fastq,out_fastq,info,threads=threads):
-    change_info = dict()
-    with pysam.FastxFile(raw_fastq) as fastq, pgzip.open(out_fastq,'wt',thread=threads, blocksize=2*10**8) as outfq:
-        for entry in fastq:
-            A_sites = [m.start() for m in re.finditer('A', entry.sequence)]
-            entry.sequence=entry.sequence.replace('A','G')
-            change_info[entry.name]=A_sites
-            outfq.write(str(entry)+'\n')
-    with open(info,'w') as f:
-        f.write(json.dumps(change_info,indent=4))
 
 
 def _multi_replace(string,index_list,nucleotide='A'):
@@ -70,11 +59,7 @@ def recover_A(readname_sorted_bam,output_bam,index_json):
 
 
 
-# prepare
-shell('echo "`date`|A2G_change_fastq START" {log}')
-A2G_change_fastq(fastq,ag_change_fastq,info_json)
-shell('echo "`date`|A2G_change_fastq DONE" {log}')
-# params
+
 extra_para=' --readFilesCommand zcat ' if ag_change_fastq.endswith('.gz') else ''
 
 cmd1=f'''

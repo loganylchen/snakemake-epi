@@ -62,9 +62,27 @@ rule gloritools_bowtie_mapping_untreated:
         "../scripts/gloritools_untreated_bowtie_mapping.py"
 
 
-rule gloritools_star_ag_mapping_treated:
+rule gloritools_ag_convertion:
     input:
         fastq="results/{sample}/gloritools/cleandata/{sample}_rmdup.fq.gz",
+    output:
+        ag_change_fastq="results/{sample}/gloritools/treated/{sample}_AG.fq.gz",
+        info_json="results/{sample}/gloritools/treated/{sample}_AG_changed_info.json",
+    threads: config["threads"]["gloritools_star_mapping"]
+    conda:
+        "../envs/mapping.yaml"
+    log:
+        "logs/gloritools/{sample}_gloritools_ag_convertion.log",
+    benchmark:
+        "benchmarks/gloritools/{sample}_gloritools_ag_convertion.txt"
+    script:
+        "../scripts/gloritools_treated_convert_ag.py"
+
+
+rule gloritools_star_ag_mapping_treated:
+    input:
+        fastq="results/{sample}/gloritools/treated/{sample}_AG.fq.gz",
+        info_json="results/{sample}/gloritools/treated/{sample}_AG_changed_info.json",
         ag_genome_indexes=multiext(
             "references/gloritools/genome_AG/",
             "chrLength.txt",
@@ -79,8 +97,6 @@ rule gloritools_star_ag_mapping_treated:
         ),
     output:
         ag_genome_unmapped_fastq="results/{sample}/gloritools/treated/{sample}_star_ag_unmapped.fq",
-        ag_change_fastq="results/{sample}/gloritools/treated/{sample}_AG.fq.gz",
-        info_json="results/{sample}/gloritools/treated/{sample}_AG_changed_info.json",
         ag_genome_star_bam="results/{sample}/gloritools/treated/{sample}.star.ag.bam",
     params:
         output_prefix=lambda w, output: output.ag_genome_unmapped_fastq.replace(
