@@ -4,6 +4,12 @@ from snakemake.utils import min_version
 min_version("6.4.1")
 
 
+wildcard_constraints:
+    sample="[0-9a-zA-Z]+_?[0-9]*",
+    tp="rvs|ag",
+    tool="bowtie|star",
+
+
 ##### setup report #####
 configfile: "config/config.yaml"
 
