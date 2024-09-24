@@ -91,6 +91,8 @@ STAR --runThreadN {threads} \
 '''
 # print(cmd1)
 shell(cmd1)
+
+shell('echo "`date`|STAR MAPPING DONE" {log}')
 # read unmapped (0x4)
 # read reverse strand (0x10)
 # not primary alignment (0x100)
@@ -102,9 +104,12 @@ samtools view -F 2324 -@ {threads} -h {raw_star_bam} | samtools sort -n -@ {thre
 # print(cmd2)
 shell(cmd2)
 
+shell('echo "`date`|FILTERING & SORTING  DONE" {log}')
+
 
 recover_A(readname_sorted_bam,convered_bam,info_json)
 
+shell('echo "`date`|RECOVER A  DONE" {log}')
 
 cmd3=f'''
 mv {output_prefix}.Unmapped.out.mate1 {ag_genome_unmapped_fastq}

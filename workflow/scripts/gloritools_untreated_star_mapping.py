@@ -38,10 +38,15 @@ STAR --runThreadN {threads} \
 
 shell(cmd1)
 
+shell('echo "`date`|STAR MAPPING DONE" {log}')
+
 cmd2 =f'''
-samtools view -F 4 -@ {threads} -h {star_raw_bam} | samtools sort -@ {threads} -o {genome_star_bam} {log}
+samtools view -F 4 -@ {threads} -h {star_raw_bam} | samtools sort -@ {threads} -o {genome_star_bam} 
 '''
 shell(cmd2)
+
+shell('echo "`date`|FILTERING & SORTING DONE" {log}')
+
 cmd3=f'''
 mv {output_prefix}.Unmapped.out.mate1 {genome_unmapped_fastq} {log}
 '''
