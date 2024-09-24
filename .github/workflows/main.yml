@@ -60,6 +60,9 @@ jobs:
       run: |
         snakemake --snakefile workflow/Snakefile --directory .test --use-conda --show-failed-logs -k -p --cores 3 --use-singularity --singularity-args ' -u '
       shell: micromamba-shell {0}
+    - name: list all the files
+      run: |
+        ls -lthrR 
     # - name: Test workflow
     #   uses: snakemake/snakemake-github-action@v1.24.0
     #   with:
