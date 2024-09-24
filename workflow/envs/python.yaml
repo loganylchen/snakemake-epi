@@ -3,8 +3,8 @@ channels:
   - bioconda
   - anaconda
 dependencies:
-  - python=3.9
-  - biopython
   - pysam
   - numpy
-  - pandas
+  - biopython
+  - pgzip
+  - python=3.9

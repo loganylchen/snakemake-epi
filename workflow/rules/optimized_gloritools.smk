@@ -70,7 +70,7 @@ rule gloritools_ag_convertion:
         info_json="results/{sample}/gloritools/treated/{sample}_AG_changed_info.json",
     threads: config["threads"]["gloritools_star_mapping"]
     conda:
-        "../envs/mapping.yaml"
+        "../envs/python.yaml"
     log:
         log="logs/gloritools/{sample}_gloritools_ag_convertion.log",
         err="logs/gloritools/{sample}_gloritools_ag_convertion.err",
@@ -80,10 +80,45 @@ rule gloritools_ag_convertion:
         "../scripts/gloritools_treated_convert_ag.py"
 
 
+rule gloritools_ag_reconvertion:
+    input:
+        readname_sorted_bam="results/{sample}/gloritools/treated/{sample}.{tool}.readname_sorted.{tp}.bam",
+        info_json="results/{sample}/gloritools/treated/{sample}_AG_changed_info.json",
+    output:
+        output_bam="results/{sample}/gloritools/treated/{sample}.{tool}.converted.{tp}.bam",
+    threads: 1
+    conda:
+        "../envs/python.yaml"
+    log:
+        log="logs/gloritools/{sample}_gloritools_{tool}_{tp}_reconvertion.log",
+        err="logs/gloritools/{sample}_gloritools_{tool}_{tp}_reconvertion.err",
+    benchmark:
+        "benchmarks/gloritools/{sample}_gloritools_{tool}_{tp}_reconvertion.txt"
+    script:
+        "../scripts/gloritools_treated_reconvert_ag.py"
+
+
+rule gloritools_star_ag_filter_treated:
+    input:
+        bam="results/{sample}/gloritools/treated/{sample}.{tool}.converted.{tp}.bam",
+    output:
+        bam="results/{sample}/gloritools/treated/{sample}.{tool}.{tp}.bam",
+    threads: config["threads"]["gloritools_star_mapping"]
+    conda:
+        "../envs/mapping.yaml"
+    log:
+        "logs/gloritools/{sample}_gloritools_{tool}_{tp}_filtering.log",
+    benchmark:
+        "benchmarks/gloritools/{sample}_gloritools_{tool}_{tp}_filtering.txt"
+    shell:
+        "samtools view -F 4 -bS -@ {threads} -h {input.bam} | samtools sort -@ {threads} - -o {output.bam}; "
+        "samtools index {output.bam};"
+        "echo `date` > {log}"
+
+
 rule gloritools_star_ag_mapping_treated:
     input:
         fastq="results/{sample}/gloritools/treated/{sample}_AG.fq.gz",
-        info_json="results/{sample}/gloritools/treated/{sample}_AG_changed_info.json",
         ag_genome_indexes=multiext(
             "references/gloritools/genome_AG/",
             "chrLength.txt",
@@ -98,7 +133,7 @@ rule gloritools_star_ag_mapping_treated:
         ),
     output:
         ag_genome_unmapped_fastq="results/{sample}/gloritools/treated/{sample}_star_ag_unmapped.fq",
-        ag_genome_star_bam="results/{sample}/gloritools/treated/{sample}.star.ag.bam",
+        ag_genome_readname_sorted_bam="results/{sample}/gloritools/treated/{sample}.star.readname_sorted.ag.bam",
     params:
         output_prefix=lambda w, output: output.ag_genome_unmapped_fastq.replace(
             "_star_ag_unmapped.fq", ""
@@ -117,7 +152,6 @@ rule gloritools_star_ag_mapping_treated:
 rule gloritools_star_rvs_mapping_treated:
     input:
         fastq="results/{sample}/gloritools/treated/{sample}_star_ag_unmapped.fq",
-        info_json="results/{sample}/gloritools/treated/{sample}_AG_changed_info.json",
         rvs_genome_indexes=multiext(
             "references/gloritools/genome_rc_AG/",
             "chrLength.txt",
@@ -132,7 +166,7 @@ rule gloritools_star_rvs_mapping_treated:
         ),
     output:
         rvs_genome_unmapped_fastq="results/{sample}/gloritools/treated/{sample}_star_rvs_unmapped.fq",
-        rvs_genome_star_bam="results/{sample}/gloritools/treated/{sample}.star.rvs.bam",
+        readname_sorted_bam="results/{sample}/gloritools/treated/{sample}.star.readname_sorted.rvs.bam",
     params:
         output_prefix=lambda w, output: output.rvs_genome_unmapped_fastq.replace(
             "_star_rvs_unmapped.fq", ""
