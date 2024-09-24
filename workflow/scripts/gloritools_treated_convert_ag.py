@@ -1,7 +1,6 @@
 import os
 import re
 import json
-import pgzip
 from Bio.Seq import reverse_complement
 import time
 import pysam
@@ -33,7 +32,7 @@ def A2G_change_fastq(raw_fastq,out_fastq,info,threads=threads):
     print("Start:", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     change_info = dict()
     n=0
-    with pysam.FastxFile(raw_fastq) as fastq, pgzip.open(out_fastq,'wt',thread=threads, blocksize=2*10**8) as outfq:
+    with pysam.FastxFile(raw_fastq) as fastq, open(out_fastq,'w') as outfq:
         for entry in fastq:
             n+=1
             A_sites = [m.start() for m in re.finditer('A', entry.sequence)]
