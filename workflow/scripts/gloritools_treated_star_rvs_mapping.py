@@ -59,3 +59,8 @@ samtools view -F 2324 -@ {threads} -h {raw_star_bam} | samtools sort -n -@ {thre
 shell(cmd2)
 
 
+cmd3=f'''
+mv {output_prefix}.rvs.Unmapped.out.mate1 {rvs_genome_unmapped_fastq}
+'''
+# print(cmd3)
+shell(cmd3)
