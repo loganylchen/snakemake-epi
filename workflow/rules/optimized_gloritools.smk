@@ -118,7 +118,7 @@ rule gloritools_star_ag_filter_treated:
 
 rule gloritools_star_ag_mapping_treated:
     input:
-        fastq="results/{sample}/gloritools/treated/{sample}_AG.fq.gz",
+        ag_change_fastq="results/{sample}/gloritools/treated/{sample}_AG.fq.gz",
         ag_genome_indexes=multiext(
             "references/gloritools/genome_AG/",
             "chrLength.txt",
