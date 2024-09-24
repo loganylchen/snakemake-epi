@@ -18,8 +18,7 @@ ag_change_fastq=snakemake.output.ag_change_fastq
 info_json = snakemake.output.info_json
 
 
-# prefix
-output_prefix = snakemake.params.output_prefix
+
 
 def _format_seconds(sec):
     hours = sec // 3600  
