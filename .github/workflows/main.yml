@@ -58,7 +58,7 @@ jobs:
         generate-run-shell: true 
     - name: Test workflow
       run: |
-        snakemake --snakefile workflow/Snakefile --directory .test --use-conda --show-failed-logs --cores 3 --use-singularity --singularity-args ' -u '
+        snakemake --snakefile workflow/Snakefile --directory .test --use-conda --show-failed-logs -k -p --cores 3 --use-singularity --singularity-args ' -u '
       shell: micromamba-shell {0}
     # - name: Test workflow
     #   uses: snakemake/snakemake-github-action@v1.24.0
