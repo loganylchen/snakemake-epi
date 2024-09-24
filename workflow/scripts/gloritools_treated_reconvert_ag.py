@@ -67,7 +67,7 @@ def recover_A(readname_sorted_bam,output_bam,index_json):
 
 START_TIME= time.time()
 
-recover_A(readname_sorted_bam,output_bam,index_json)
+recover_A(readname_sorted_bam,output_bam,info_json)
 
 END_TIME = time.time()
 h,m,s=_format_seconds(END_TIME-START_TIME)
