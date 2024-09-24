@@ -15,7 +15,7 @@ info_json = snakemake.input.info_json
 
 # outputs
 output_bam=snakemake.output.output_bam
-
+BATCH_SIZE=5000000
 
 def _format_seconds(sec):
     hours = sec // 3600  
@@ -53,11 +53,11 @@ def recover_A(readname_sorted_bam,output_bam,index_json):
                 read.query_qualities = qualities
                 previous_read_name =read.query_name
                 output_bam.write(read)
-            if n %10000 ==0:
+            if n %BATCH_SIZE ==0:
                 end_time = time.time()
                 h,m,s = _format_seconds(end_time-start_time)
                 print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-                print(f'{n} reads has been reconverted, the last 10000 reads used: {h}:{m}:{s}')
+                print(f'{n} reads has been reconverted, the last {BATCH_SIZE} reads used: {h}:{m}:{s}')
                 start_time=time.time()
     print("End:", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
 
