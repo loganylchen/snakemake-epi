@@ -8,3 +8,4 @@ dependencies:
   - biopython
   - pgzip
   - python=3.9
+  - pandas
