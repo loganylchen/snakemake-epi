@@ -71,8 +71,9 @@ convered_bam=f"{output_prefix}.Aligned.Converted.bam"
 
 
 # prepare
+shell('echo "`date`|A2G_change_fastq START" {log}')
 A2G_change_fastq(fastq,ag_change_fastq,info_json)
-
+shell('echo "`date`|A2G_change_fastq DONE" {log}')
 # params
 extra_para=' --readFilesCommand zcat ' if ag_change_fastq.endswith('.gz') else ''
 
