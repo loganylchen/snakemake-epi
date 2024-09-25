@@ -25,7 +25,7 @@ output_prefix = snakemake.params.output_prefix
 # outputs
 
 transcriptome_unmapped_fastq=snakemake.output.ag_transcriptome_fastq
-transcriptome_bowtie_bam = snakemake.output.ag_transcriptome_bowtie_bam
+transcriptome_bowtie_bam = snakemake.output.readname_sorted_bam
 
 # temp
 bowtie_raw_bam=f'{output_prefix}.rawBowtie.out.bam'
