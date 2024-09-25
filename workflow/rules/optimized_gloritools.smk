@@ -211,7 +211,7 @@ rule gloritools_star_rvs_mapping_treated:
 rule gloritools_bowtie_ag_mapping_treated:
     input:
         fastq="results/{sample}/gloritools/treated/{sample}_star_rvs_unmapped.fq",
-        info_db="results/{sample}/gloritools/treated/{sample}_AG_changed_info.db",
+        info_db="results/{sample}/gloritools/treated/{sample}_AG_changed_info.sqlite",
         ag_transcriptome_indexes=multiext(
             "references/gloritools/transcriptome_AG.fa",
             ".1.ebwt",
