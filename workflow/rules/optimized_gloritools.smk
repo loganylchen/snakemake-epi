@@ -70,7 +70,7 @@ rule gloritools_ag_convertion:
     input:
         fastq="results/{sample}/gloritools/cleandata/{sample}_rmdup.fq.gz",
     output:
-        ag_change_fastq=temp("results/{sample}/gloritools/treated/{sample}_AG.fq"),
+        ag_change_fastq=temp("results/{sample}/gloritools/treated/{sample}_AG.fq.gz"),
         info_db="results/{sample}/gloritools/treated/{sample}_AG_changed_info.sqlite",
     threads: config["threads"]["gloritools_star_mapping"]
     conda:
@@ -140,7 +140,7 @@ rule gloritools_bowtie_filter_treated:
 
 rule gloritools_star_ag_mapping_treated:
     input:
-        ag_change_fastq="results/{sample}/gloritools/treated/{sample}_AG.fq",
+        ag_change_fastq="results/{sample}/gloritools/treated/{sample}_AG.fq.gz",
         ag_genome_indexes=multiext(
             "references/gloritools/genome_AG/",
             "chrLength.txt",

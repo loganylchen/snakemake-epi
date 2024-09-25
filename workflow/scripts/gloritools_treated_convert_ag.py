@@ -5,7 +5,7 @@ import sqlite3
 from Bio.Seq import reverse_complement
 import time
 import pysam
-
+import pgzip
 
 sys.stdout = open(snakemake.log.log,'w') 
 sys.stderr= open(snakemake.log.err, 'w')
@@ -41,6 +41,7 @@ def A2G_change_fastq(raw_fastq,out_fastq,info,threads=threads):
     start_time = time.time()
     print("Start:", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     if os.path.exists(info):
+        print(f'Existing {info}: removing it!!')
         os.remove(info)
     os.makedirs(os.path.dirname(info),exist_ok=True)
     conn = sqlite3.connect(info)
@@ -48,7 +49,7 @@ def A2G_change_fastq(raw_fastq,out_fastq,info,threads=threads):
     c.execute('CREATE TABLE IF NOT EXISTS reads (name TEXT, value BLOB)')
     data_to_insert = []
     n=0
-    with pysam.FastxFile(raw_fastq) as fastq, open(out_fastq,'w') as outfq:
+    with pysam.FastxFile(raw_fastq) as fastq, pgzip.open(out_fastq,'wt',thread=threads, blocksize=2*10**8)  as outfq:
         for entry in fastq:
             n+=1
             A_sites = [m.start() for m in re.finditer('A', entry.sequence)]
