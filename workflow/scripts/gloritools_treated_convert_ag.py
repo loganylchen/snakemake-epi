@@ -1,6 +1,7 @@
 import os
 import re
-import json
+import pickle
+import sqlite3
 from Bio.Seq import reverse_complement
 import time
 import pysam
@@ -15,52 +16,73 @@ threads = snakemake.threads
 
 # outputs
 ag_change_fastq=snakemake.output.ag_change_fastq
-info_json = snakemake.output.info_json
+info_db = snakemake.output.info_db
+
+
+
+
 
 
 BATCH_SIZE=5000000
 
 def _format_seconds(sec):
-    hours = sec // 3600  
-    minutes = (sec % 3600) // 60  
-    seconds = sec % 60  
+    hours = int(sec // 3600 ) 
+    minutes = int((sec % 3600) // 60 ) 
+    seconds = int(sec % 60)
     return hours, minutes, seconds
+
+
+
+
+
 
 
 def A2G_change_fastq(raw_fastq,out_fastq,info,threads=threads):
     start_time = time.time()
     print("Start:", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-    change_info = dict()
+    if os.path.exists(info):
+        os.remove(info)
+    conn = sqlite3.connect(info)
+    c = conn.cursor()
+    c.execute('CREATE TABLE IF NOT EXISTS reads (name TEXT, value BLOB)')
+    data_to_insert = []
     n=0
     with pysam.FastxFile(raw_fastq) as fastq, open(out_fastq,'w') as outfq:
         for entry in fastq:
             n+=1
             A_sites = [m.start() for m in re.finditer('A', entry.sequence)]
             entry.sequence=entry.sequence.replace('A','G')
-            change_info[entry.name]=A_sites
+            # change_info[entry.name]=A_sites
+            data_to_insert.append((entry.name),pickle.dumps(A_sites))
             outfq.write(str(entry)+'\n')
             if n %BATCH_SIZE ==0:
+                conn.executemany('INSERT INTO reads (name, value) VALUES (?, ?)', data_to_insert)
+                conn.commit()
+                data_to_insert=[]
                 end_time = time.time()
                 h,m,s = _format_seconds(end_time-start_time)
                 print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
                 print(f'{n} reads has been converted, the last {BATCH_SIZE} reads used: {h}:{m}:{s}')
                 start_time=time.time()
-                print(sys.getsizeof(change_info))
+                # print(sys.getsizeof(change_info))
 
     end_time = time.time()
     h,m,s = _format_seconds(end_time-start_time)
     print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     print(f'{n} reads has been converted, the last {BATCH_SIZE} reads used: {h}:{m}:{s}')
-    start_time=time.time()
-    
-    with open(info,'w') as f:
-        f.write(json.dumps(change_info,indent=4))
-    print("End:", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+    conn.executemany('INSERT INTO reads (name, value) VALUES (?, ?)', data_to_insert)
+    conn.commit()
+    conn.execute('PRAGMA synchronous = OFF')
+    conn.execute('PRAGMA journal_mode = WAL')
+    conn.execute('PRAGMA cache_size = 10000')
+    c.execute('CREATE INDEX IF NOT EXISTS idx_name ON reads(name)')
+    c.close()
+    conn.close()
 
 
 START_TIME= time.time()
 
-A2G_change_fastq(fastq,ag_change_fastq,info_json)
+A2G_change_fastq(fastq,ag_change_fastq,info_db)
 
 END_TIME = time.time()
 h,m,s=_format_seconds(END_TIME-START_TIME)

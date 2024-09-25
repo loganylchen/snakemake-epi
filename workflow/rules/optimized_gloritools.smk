@@ -14,7 +14,9 @@ rule gloritools_star_mapping_untreated:
             "SA",
         ),
     output:
-        genome_unmapped_fastq=temp("results/{sample}/gloritools/untreated/{sample}_genome_unmapped.fq"),
+        genome_unmapped_fastq=temp(
+            "results/{sample}/gloritools/untreated/{sample}_genome_unmapped.fq"
+        ),
         genome_star_bam="results/{sample}/gloritools/untreated/{sample}.star.bam",
     params:
         output_prefix=lambda w, output: output.genome_unmapped_fastq.replace(
@@ -45,7 +47,9 @@ rule gloritools_bowtie_mapping_untreated:
         ),
         transcriptome_reference="references/gloritools/selected_transcriptome.fa",
     output:
-        transcriptome_unmapped_fastq=temp("results/{sample}/gloritools/untreated/{sample}_transcriptome_unmapped.fq"),
+        transcriptome_unmapped_fastq=temp(
+            "results/{sample}/gloritools/untreated/{sample}_transcriptome_unmapped.fq"
+        ),
         transcriptome_bowtie_bam="results/{sample}/gloritools/untreated/{sample}.bowtie.bam",
     params:
         output_prefix=lambda w, output: output.transcriptome_unmapped_fastq.replace(
@@ -67,7 +71,7 @@ rule gloritools_ag_convertion:
         fastq="results/{sample}/gloritools/cleandata/{sample}_rmdup.fq.gz",
     output:
         ag_change_fastq=temp("results/{sample}/gloritools/treated/{sample}_AG.fq"),
-        info_json="results/{sample}/gloritools/treated/{sample}_AG_changed_info.json",
+        info_db="results/{sample}/gloritools/treated/{sample}_AG_changed_info.sqlite",
     threads: config["threads"]["gloritools_star_mapping"]
     conda:
         "../envs/python.yaml"
@@ -83,7 +87,7 @@ rule gloritools_ag_convertion:
 rule gloritools_ag_reconvertion:
     input:
         readname_sorted_bam="results/{sample}/gloritools/treated/{sample}.{tool}.readname_sorted.{tp}.bam",
-        info_json="results/{sample}/gloritools/treated/{sample}_AG_changed_info.json",
+        info_db="results/{sample}/gloritools/treated/{sample}_AG_changed_info.sqlite",
     output:
         output_bam="results/{sample}/gloritools/treated/{sample}.{tool}.converted.{tp}.bam",
     threads: 1
@@ -132,7 +136,9 @@ rule gloritools_star_ag_mapping_treated:
             "SA",
         ),
     output:
-        ag_genome_unmapped_fastq=temp("results/{sample}/gloritools/treated/{sample}_star_ag_unmapped.fq"),
+        ag_genome_unmapped_fastq=temp(
+            "results/{sample}/gloritools/treated/{sample}_star_ag_unmapped.fq"
+        ),
         ag_genome_readname_sorted_bam="results/{sample}/gloritools/treated/{sample}.star.readname_sorted.ag.bam",
     params:
         output_prefix=lambda w, output: output.ag_genome_unmapped_fastq.replace(
@@ -165,7 +171,9 @@ rule gloritools_star_rvs_mapping_treated:
             "SA",
         ),
     output:
-        rvs_genome_unmapped_fastq=temp("results/{sample}/gloritools/treated/{sample}_star_rvs_unmapped.fq"),
+        rvs_genome_unmapped_fastq=temp(
+            "results/{sample}/gloritools/treated/{sample}_star_rvs_unmapped.fq"
+        ),
         readname_sorted_bam="results/{sample}/gloritools/treated/{sample}.star.readname_sorted.rvs.bam",
     params:
         output_prefix=lambda w, output: output.rvs_genome_unmapped_fastq.replace(
@@ -197,7 +205,9 @@ rule gloritools_bowtie_ag_mapping_treated:
         ),
         ag_transcriptome_reference="references/gloritools/transcriptome_AG.fa",
     output:
-        ag_transcriptome_fastq=temp("results/{sample}/gloritools/treated/{sample}_bowtie_ag_unmapped.fq"),
+        ag_transcriptome_fastq=temp(
+            "results/{sample}/gloritools/treated/{sample}_bowtie_ag_unmapped.fq"
+        ),
         ag_transcriptome_bowtie_bam="results/{sample}/gloritools/treated/{sample}.bowtie.ag.bam",
     params:
         output_prefix=lambda w, output: output.ag_transcriptome_fastq.replace(
