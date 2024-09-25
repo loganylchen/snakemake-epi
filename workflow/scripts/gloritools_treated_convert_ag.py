@@ -42,6 +42,7 @@ def A2G_change_fastq(raw_fastq,out_fastq,info,threads=threads):
     print("Start:", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     if os.path.exists(info):
         os.remove(info)
+    os.makedirs(os.path.dirname(info),exist_ok=True)
     conn = sqlite3.connect(info)
     c = conn.cursor()
     c.execute('CREATE TABLE IF NOT EXISTS reads (name TEXT, value BLOB)')
@@ -53,7 +54,7 @@ def A2G_change_fastq(raw_fastq,out_fastq,info,threads=threads):
             A_sites = [m.start() for m in re.finditer('A', entry.sequence)]
             entry.sequence=entry.sequence.replace('A','G')
             # change_info[entry.name]=A_sites
-            data_to_insert.append((entry.name),pickle.dumps(A_sites))
+            data_to_insert.append((entry.name,pickle.dumps(A_sites)))
             outfq.write(str(entry)+'\n')
             if n %BATCH_SIZE ==0:
                 conn.executemany('INSERT INTO reads (name, value) VALUES (?, ?)', data_to_insert)

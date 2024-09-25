@@ -48,7 +48,7 @@ def recover_A(readname_sorted_bam,output_bam,info_db):
                 raise ValueError(f'{read.query_name} was duplicated in the {readname_sorted_bam}')
             else:
                 qualities = read.query_qualities
-                c.execute('SELECT value FROM reads WHERE name = ? LIMIT 1', (read,query_name,))
+                c.execute('SELECT value FROM reads WHERE name = ? LIMIT 1', (read.query_name,))
                 result = c.fetchone()
                 index_list = pickle.loads(result[0])
                 if read.is_forward:

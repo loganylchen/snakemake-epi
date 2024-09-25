@@ -102,20 +102,38 @@ rule gloritools_ag_reconvertion:
         "../scripts/gloritools_treated_reconvert_ag.py"
 
 
-rule gloritools_star_ag_filter_treated:
+rule gloritools_star_filter_treated:
     input:
-        bam="results/{sample}/gloritools/treated/{sample}.{tool}.converted.{tp}.bam",
+        bam="results/{sample}/gloritools/treated/{sample}.star.converted.{tp}.bam",
     output:
-        bam="results/{sample}/gloritools/treated/{sample}.{tool}.{tp}.bam",
+        bam="results/{sample}/gloritools/treated/{sample}.star.{tp}.bam",
     threads: config["threads"]["gloritools_star_mapping"]
     conda:
         "../envs/mapping.yaml"
     log:
-        "logs/gloritools/{sample}_gloritools_{tool}_{tp}_filtering.log",
+        "logs/gloritools/{sample}_gloritools_star_{tp}_filtering.log",
     benchmark:
-        "benchmarks/gloritools/{sample}_gloritools_{tool}_{tp}_filtering.txt"
+        "benchmarks/gloritools/{sample}_gloritools_star_{tp}_filtering.txt"
     shell:
         "samtools view -F 4 -bS -@ {threads} -h {input.bam} | samtools sort -@ {threads} - -o {output.bam}; "
+        "samtools index {output.bam};"
+        "echo `date` > {log}"
+
+
+rule gloritools_bowtie_filter_treated:
+    input:
+        bam="results/{sample}/gloritools/treated/{sample}.bowtie.converted.{tp}.bam",
+    output:
+        bam="results/{sample}/gloritools/treated/{sample}.bowtie.{tp}.bam",
+    threads: config["threads"]["gloritools_star_mapping"]
+    conda:
+        "../envs/mapping.yaml"
+    log:
+        "logs/gloritools/{sample}_gloritools_bowtie_{tp}_filtering.log",
+    benchmark:
+        "benchmarks/gloritools/{sample}_gloritools_bowtie_{tp}_filtering.txt"
+    shell:
+        "samtools view -F 2324 -bS -@ {threads} -h {input.bam} | samtools sort -@ {threads} - -o {output.bam}; "
         "samtools index {output.bam};"
         "echo `date` > {log}"
 
@@ -193,7 +211,7 @@ rule gloritools_star_rvs_mapping_treated:
 rule gloritools_bowtie_ag_mapping_treated:
     input:
         fastq="results/{sample}/gloritools/treated/{sample}_star_rvs_unmapped.fq",
-        info_json="results/{sample}/gloritools/treated/{sample}_AG_changed_info.json",
+        info_db="results/{sample}/gloritools/treated/{sample}_AG_changed_info.db",
         ag_transcriptome_indexes=multiext(
             "references/gloritools/transcriptome_AG.fa",
             ".1.ebwt",
@@ -208,7 +226,7 @@ rule gloritools_bowtie_ag_mapping_treated:
         ag_transcriptome_fastq=temp(
             "results/{sample}/gloritools/treated/{sample}_bowtie_ag_unmapped.fq"
         ),
-        ag_transcriptome_bowtie_bam="results/{sample}/gloritools/treated/{sample}.bowtie.ag.bam",
+        readname_sorted_bam="results/{sample}/gloritools/treated/{sample}.bowtie.readname_sorted.ag.bam",
     params:
         output_prefix=lambda w, output: output.ag_transcriptome_fastq.replace(
             "_bowtie_ag_unmapped.fq", ""
