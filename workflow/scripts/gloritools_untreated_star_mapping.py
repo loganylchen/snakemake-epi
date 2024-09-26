@@ -47,10 +47,15 @@ shell(cmd2)
 
 shell('echo "`date`|FILTERING & SORTING DONE" {log}')
 
-cmd3=f'''
-mv {output_prefix}.Unmapped.out.mate1 {genome_unmapped_fastq} {log}
-'''
-shell(cmd3)
+
+
+if genome_unmapped_fastq.endswith('.gz'):
+    cmd = 'gzip -c {output_prefix}.Unmapped.out.mate1 > {genome_unmapped_fastq} ; rm {output_prefix}.Unmapped.out.mate1'
+else:
+    cmd = 'mv {output_prefix}.Unmapped.out.mate1 {genome_unmapped_fastq} '
+shell(cmd)
+
+
 cmd4=f'''
 samtools index {genome_star_bam} {log}
 '''

@@ -59,11 +59,13 @@ shell(cmd2)
 shell('echo "`date`|FILTERING & SORTING  DONE" {log}')
 
 
-cmd3=f'''
-mv {output_prefix}.Unmapped.out.mate1 {ag_genome_unmapped_fastq}
-'''
-# print(cmd3)
-shell(cmd3)
+if ag_genome_unmapped_fastq.endswith('.gz'):
+    cmd = 'gzip -c {output_prefix}.Unmapped.out.mate1 > {ag_genome_unmapped_fastq} ; rm {output_prefix}.Unmapped.out.mate1'
+else:
+    cmd = 'mv {output_prefix}.Unmapped.out.mate1 {ag_genome_unmapped_fastq} '
+shell(cmd)
+
+
 
 
 

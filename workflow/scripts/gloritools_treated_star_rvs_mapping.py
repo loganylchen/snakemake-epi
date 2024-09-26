@@ -59,8 +59,11 @@ samtools view -F 2324 -@ {threads} -h {raw_star_bam} | samtools sort -n -@ {thre
 shell(cmd2)
 
 
-cmd3=f'''
-mv {output_prefix}.rvs.Unmapped.out.mate1 {rvs_genome_unmapped_fastq}
-'''
-# print(cmd3)
-shell(cmd3)
+
+if rvs_genome_unmapped_fastq.endswith('.gz'):
+    cmd = 'gzip -c {output_prefix}.rvs.Unmapped.out.mate1 > {rvs_genome_unmapped_fastq} ; rm {output_prefix}.rvs.Unmapped.out.mate1'
+else:
+    cmd = 'mv {output_prefix}.rvs.Unmapped.out.mate1 {rvs_genome_unmapped_fastq} '
+shell(cmd)
+
+
