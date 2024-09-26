@@ -8,5 +8,5 @@ logs/**
 .test/logs
 .test/references
 .test/results
-tmp.ipynb
+tmp*
 
