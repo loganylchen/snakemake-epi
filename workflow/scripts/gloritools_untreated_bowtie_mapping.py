@@ -32,10 +32,13 @@ bowtie -k 1 -m 1  -v 2  \
 shell(cmd6)
 
 cmd7=f'''
-samtools view -F 4 -bS -@ {threads} -h {bowtie_raw_bam} | samtools sort - -o {transcriptome_bowtie_bam} 
+samtools view -F 4 -bS -@ {threads} -h {bowtie_raw_bam} | samtools sort - -o {transcriptome_bowtie_bam};
+'rm {bowtie_raw_bam}'
 '''
 # print(cmd7)
 shell(cmd7)
+
+
 
 cmd8=f'''
 samtools index {transcriptome_bowtie_bam}
